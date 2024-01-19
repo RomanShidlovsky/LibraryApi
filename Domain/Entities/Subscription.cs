@@ -1,6 +1,8 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
 
-public class Subscription
+namespace Domain.Entities;
+
+public class Subscription : BaseEntity
 {
     public int BookId { get; set; }
     public int UserId { get; set; }

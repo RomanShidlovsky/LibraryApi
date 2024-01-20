@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
+using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Context;
+using Persistence.Repositories;
 
 namespace Persistence;
 
@@ -17,5 +19,12 @@ public static class ServiceExtensions
                 opt.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"),
                     x => x.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName)));
+
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IGenreRepository, GenreRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 }

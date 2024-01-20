@@ -12,7 +12,6 @@
       <Folder Include="Features\Book\Queries\" />
       <Folder Include="Interfaces\Commands\" />
       <Folder Include="Profile\" />
-      <Folder Include="Wrappers\" />
     </ItemGroup>
 
     <ItemGroup>

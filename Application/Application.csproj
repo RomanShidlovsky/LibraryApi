@@ -10,7 +10,7 @@
       <Folder Include="DTOs\" />
       <Folder Include="Features\Book\Commands\" />
       <Folder Include="Features\Book\Queries\" />
-      <Folder Include="Interfaces\" />
+      <Folder Include="Interfaces\Commands\" />
       <Folder Include="Profile\" />
       <Folder Include="Wrappers\" />
     </ItemGroup>

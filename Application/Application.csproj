@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Handlers\" />
-      <Folder Include="Features\" />
+      <Folder Include="DTOs\" />
+      <Folder Include="Features\Book\Commands\" />
+      <Folder Include="Features\Book\Queries\" />
+      <Folder Include="Interfaces\" />
+      <Folder Include="Profile\" />
+      <Folder Include="Wrappers\" />
     </ItemGroup>
 
     <ItemGroup>

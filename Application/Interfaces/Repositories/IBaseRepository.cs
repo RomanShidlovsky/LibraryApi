@@ -2,7 +2,10 @@
 
 namespace Application.Interfaces.Repositories;
 
-public interface IBaseRepository<T> where T : BaseEntity
+public interface IBaseRepository;
+
+public interface IBaseRepository<T> : IBaseRepository
+    where T : BaseEntity
 {
     void Create(T entity);
     void Update(T entity);

@@ -9,5 +9,5 @@ public class Book : BaseEntity
     public string? Description { get; set; }
     public List<Author> Authors { get; set; }
     public List<Genre> Genres { get; set; }
-    public List<Subscription> Subscriptions { get; set; }
+    public List<Subscription> Subscriptions { get; set; } = [];
 }

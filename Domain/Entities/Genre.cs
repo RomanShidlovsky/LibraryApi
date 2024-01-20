@@ -2,8 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Genre : BaseEntity
+public class Genre : NamedEntity
 {
-    public string Name { get; set; }
-    public List<Book> Books { get; set; }
+    public List<Book> Books { get; set; } = [];
 }

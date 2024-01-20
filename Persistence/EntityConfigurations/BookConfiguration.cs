@@ -11,6 +11,5 @@ public class BookConfiguration : BaseConfiguration<Book>
         builder.Property(b => b.Title).HasMaxLength(100);
         builder.Property(b => b.ISBN).HasMaxLength(13);
         builder.HasAlternateKey(b => b.ISBN);
-        
     }
 }

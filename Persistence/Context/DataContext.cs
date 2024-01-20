@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using System.Reflection;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityConfigurations;
 
@@ -10,12 +11,12 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     public DbSet<Book> Books { get; set; } = null!;
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Subscription> Subscriptions { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new AuthorConfiguration());
-        modelBuilder.ApplyConfiguration(new BookConfiguration());
-        modelBuilder.ApplyConfiguration(new GenreConfiguration());
-        modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

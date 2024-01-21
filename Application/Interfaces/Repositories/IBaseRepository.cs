@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using System.Linq.Expressions;
+using Domain.Common;
 
 namespace Application.Interfaces.Repositories;
 
@@ -10,6 +11,7 @@ public interface IBaseRepository<T> : IBaseRepository
     void Create(T entity);
     void Update(T entity);
     void Delete(T entity);
+    Task<List<T>> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken);
     Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
     Task<List<T>> GetAllAsync(CancellationToken cancellationToken);
     Task<bool> ExistsAsync(int id, CancellationToken cancellationToken);

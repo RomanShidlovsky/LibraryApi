@@ -9,5 +9,6 @@ public class GenreConfiguration : BaseConfiguration<Genre>
     {
         base.Configure(builder);
         builder.Property(g => g.Name).HasMaxLength(15);
+        builder.HasAlternateKey(g => g.Name);
     }
 }

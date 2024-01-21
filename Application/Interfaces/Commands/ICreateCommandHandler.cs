@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Application.Interfaces.Commands;
 
-public interface ICreateCommandHandler<TCommand, TModel> : IRequestHandler<TCommand, Response<TModel>>
-    where TCommand : ICreateCommand<TModel>;
+public interface ICreateCommandHandler<TCommand, TViewModel> : IRequestHandler<TCommand, Response<TViewModel>>
+    where TCommand : ICreateCommand<TViewModel>;

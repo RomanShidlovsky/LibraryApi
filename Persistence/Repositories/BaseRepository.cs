@@ -31,17 +31,17 @@ public class BaseRepository<T>
         Context.Remove(entity);
     }
 
-    public virtual Task<T?> Get(int id, CancellationToken cancellationToken)
+    public virtual Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
         return Context.Set<T>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public virtual Task<List<T>> GetAll(CancellationToken cancellationToken)
+    public virtual Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
     {
         return Context.Set<T>().ToListAsync(cancellationToken);
     }
 
-    public Task<bool> Exists(int id, CancellationToken cancellationToken)
+    public Task<bool> ExistsAsync(int id, CancellationToken cancellationToken)
     {
         return Context.Set<T>().AnyAsync(t => t.Id == id, cancellationToken);
     }

@@ -4,9 +4,9 @@ namespace Application.Interfaces.Repositories;
 
 public interface IBookRepository : IBaseRepository<Book>
 {
-    Task<Book?> GetByIsbn(string isbn, CancellationToken cancellationToken);
-    bool AddAuthor(int bookId, int authorId);
-    bool DeleteAuthor(int bookId, int authorId);
-    bool AddGenre(int bookId, int genreId);
-    bool DeleteGenre(int bookId, int genreId);
+    Task<Book?> GetByIsbnAsync(string isbn, CancellationToken cancellationToken);
+    Task<bool> AddAuthorAsync(int bookId, int authorId, CancellationToken cancellationToken);
+    Task<bool> DeleteAuthorAsync(int bookId, int authorId, CancellationToken cancellationToken);
+    Task<bool> AddGenreAsync(int bookId, int genreId, CancellationToken cancellationToken);
+    Task<bool> DeleteGenreAsync(int bookId, int genreId, CancellationToken cancellationToken);
 }

@@ -10,7 +10,7 @@ public interface IBaseRepository<T> : IBaseRepository
     void Create(T entity);
     void Update(T entity);
     void Delete(T entity);
-    Task<T?> Get(int id, CancellationToken cancellationToken);
-    Task<List<T>> GetAll(CancellationToken cancellationToken);
-    Task<bool> Exists(int id, CancellationToken cancellationToken);
+    Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<List<T>> GetAllAsync(CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(int id, CancellationToken cancellationToken);
 }

@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Application.Interfaces.Queries;
 
-public interface IQueryHandler<TQuery, TModel> : IRequestHandler<TQuery, PagedResponse<TModel>>
-    where TQuery : IQuery<TModel>; 
+public interface IQueryHandler<TQuery, TViewModel> : IRequestHandler<TQuery, Response<TViewModel>>
+    where TQuery : IQuery<TViewModel>; 

@@ -7,11 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\" />
-      <Folder Include="Features\Book\Commands\" />
-      <Folder Include="Features\Book\Queries\" />
+      <Folder Include="Features\AuthorFeatures\" />
+      <Folder Include="Features\BookFeatures\Commands\" />
+      <Folder Include="Features\BookFeatures\Queries\" />
+      <Folder Include="Features\Role\Commands\" />
       <Folder Include="Features\Role\Queries\" />
-      <Folder Include="Profile\" />
+      <Folder Include="Features\Subscription\" />
+      <Folder Include="Features\User\" />
     </ItemGroup>
 
     <ItemGroup>

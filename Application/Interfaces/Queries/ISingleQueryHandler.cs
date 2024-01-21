@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Application.Interfaces.Queries;
 
-public interface ISingleQueryHandler<TQuery, TModel> : IRequestHandler<TQuery, Response<TModel>>
-    where TQuery : ISingleQuery<TModel>;
+public interface ISingleQueryHandler<TQuery, TViewModel> : IRequestHandler<TQuery, Response<TViewModel>>
+    where TQuery : ISingleQuery<TViewModel>;

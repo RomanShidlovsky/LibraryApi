@@ -1,11 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Context;
-using Persistence.Repositories;
 
-namespace Persistence.UnitOfWork;
+namespace Persistence;
 
 public class UnitOfWork(DataContext context, IServiceProvider serviceProvider) : IUnitOfWork
 {

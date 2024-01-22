@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,5 +27,6 @@ public static class ServiceExtensions
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }

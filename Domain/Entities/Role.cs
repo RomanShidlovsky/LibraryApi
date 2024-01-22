@@ -4,5 +4,5 @@ namespace Domain.Entities;
 
 public class Role : NamedEntity
 {
-    public List<User> Users { get; set; } = [];
+    public virtual List<User> Users { get; set; } = [];
 }

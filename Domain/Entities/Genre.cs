@@ -4,5 +4,5 @@ namespace Domain.Entities;
 
 public class Genre : NamedEntity
 {
-    public List<Book> Books { get; set; } = [];
+    public virtual List<Book> Books { get; set; } = [];
 }

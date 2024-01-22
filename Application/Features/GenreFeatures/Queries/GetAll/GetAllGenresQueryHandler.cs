@@ -15,6 +15,6 @@ public class GetAllGenresQueryHandler(
     {
         var genresList = await repository.GetAllAsync(cancellationToken);
 
-        return new Response<IEnumerable<GenreViewModel>>(mapper.Map<IEnumerable<GenreViewModel>>(genresList));
+        return mapper.Map<List<GenreViewModel>>(genresList);
     }
 }

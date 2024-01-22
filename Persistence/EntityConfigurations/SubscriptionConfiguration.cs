@@ -11,6 +11,6 @@ public class SubscriptionConfiguration : BaseConfiguration<Subscription>
         base.Configure(builder);
         builder.Property(t => t.TakenAt).HasDefaultValue(DateTime.Now);
         builder.ToTable(t => t.HasCheckConstraint("CK_TakenBeforeReturn", "[TakenAt] < [ShouldReturnAt]"));
-        builder.Property(s => s.IsActive).HasDefaultValue(false);
+        builder.Property(s => s.IsActive).HasDefaultValue(true);
     }
 }

@@ -9,7 +9,8 @@
     <ItemGroup>
       <Folder Include="Features\BookFeatures\Commands\" />
       <Folder Include="Features\BookFeatures\Queries\" />
-      <Folder Include="Features\SubscriptionFeatures\Commands\" />
+      <Folder Include="Features\SubscriptionFeatures\Commands\Delete\" />
+      <Folder Include="Features\SubscriptionFeatures\Commands\Update\" />
       <Folder Include="Features\User\" />
     </ItemGroup>
 

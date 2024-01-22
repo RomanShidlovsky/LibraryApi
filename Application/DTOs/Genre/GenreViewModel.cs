@@ -2,5 +2,4 @@
 
 public sealed record GenreViewModel(
     int Id, 
-    string Name
-);
+    string Name);

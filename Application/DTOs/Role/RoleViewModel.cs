@@ -2,5 +2,4 @@
 
 public sealed record RoleViewModel(
     int Id, 
-    string Name
-);
+    string Name);

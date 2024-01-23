@@ -13,4 +13,12 @@ public class Subscription : BaseEntity
     public DateTime TakenAt { get; set; }
     public DateTime ShouldReturnAt { get; set; }
     public bool IsActive { get; set; }
+
+    public void ReturnBook()
+    {
+        if (!IsActive)
+            throw new InvalidOperationException("Book already returned.");
+
+        IsActive = false;
+    }
 }

@@ -20,7 +20,7 @@ public class ReturnBookCommandHandler(IUnitOfWork unitOfWork) :
         if (subscription == null || !subscription.IsActive)
             return new InvalidOperationException("Book already returned.");
 
-        subscription.IsActive = false;
+        subscription.ReturnBook();
         await unitOfWork.SaveAsync(cancellationToken);
 
         return true;

@@ -1,8 +1,18 @@
 ﻿namespace Application.Exceptions;
 
-public class NotFoundException(int id, Type entityType)
-    : Exception($"Entity {entityType.Name} with id: {id} not found.")
+public class NotFoundException : Exception
 {
-    public int Id { get; init; } = id;
-    public Type EntityType { get; init; } = entityType;
+    public int Id { get; init; }
+    public Type? EntityType { get; init; }
+
+    public NotFoundException(string message, Type? entityType = null) : base(message)
+    {
+        EntityType = entityType;
+    }
+
+    public NotFoundException(int id, Type entityType) : base($"Entity {entityType.Name} with id: {id} not found.")
+    {
+        Id = id;
+        EntityType = entityType;
+    }
 }

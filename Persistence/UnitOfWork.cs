@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Context;
@@ -7,7 +8,7 @@ namespace Persistence;
 
 public class UnitOfWork(DataContext context, IServiceProvider serviceProvider) : IUnitOfWork
 {
-    private bool _disposed = false;
+    private bool disposed = false;
 
     public TRepository GetRepository<TRepository>() where TRepository : IBaseRepository
     {
@@ -26,7 +27,7 @@ public class UnitOfWork(DataContext context, IServiceProvider serviceProvider) :
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!_disposed)
+        if (!disposed)
         {
             if (disposing)
             {
@@ -34,7 +35,7 @@ public class UnitOfWork(DataContext context, IServiceProvider serviceProvider) :
             }
         }
 
-        _disposed = true;
+        disposed = true;
     }
 
     public void Dispose()

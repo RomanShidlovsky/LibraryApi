@@ -22,10 +22,8 @@ public class CreateSubscriptionCommandHandler(
             return new NotFoundException(request.BookId, typeof(Book));
 
         if (book.Subscriptions.Any(s => s.IsActive))
-        {
-            return new Exception("Book is already taken.");
-        }
-
+            return new InvalidOperationException("Book is already taken.");
+        
         var user = await unitOfWork.GetRepository<IUserRepository>().GetByIdAsync(request.UserId, cancellationToken);
         if (user == null)
             return new NotFoundException(request.UserId, typeof(User));

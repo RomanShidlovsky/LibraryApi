@@ -1,4 +1,5 @@
 using Application;
+using Application.Extensions;
 using Persistence;
 using Persistence.Context;
 

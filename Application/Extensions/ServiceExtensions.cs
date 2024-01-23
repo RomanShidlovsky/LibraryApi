@@ -4,7 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application;
+namespace Application.Extensions;
 
 public static class ServiceExtensions
 {

@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Features\BookFeatures\Commands\" />
       <Folder Include="Features\BookFeatures\Queries\" />
       <Folder Include="Features\User\" />
     </ItemGroup>

@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using Application;
+using Application.Auth;
 using Application.Interfaces;
+using Application.Interfaces.Authentication;
 using Application.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,5 +31,6 @@ public static class ServiceExtensions
         services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
     }
 }

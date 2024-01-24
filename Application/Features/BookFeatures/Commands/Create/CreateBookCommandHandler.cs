@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Book;
 using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -23,10 +24,10 @@ public class CreateBookCommandHandler(
             return new DuplicateException();
         
         var genres = await unitOfWork.GetRepository<IGenreRepository>()
-            .Get(g => request.GenreIds.Contains(g.Id), cancellationToken);
+            .GetAsync(g => request.GenreIds.Contains(g.Id), cancellationToken);
 
         var authors = await unitOfWork.GetRepository<IAuthorRepository>()
-            .Get(a => request.AuthorIds.Contains(a.Id), cancellationToken);
+            .GetAsync(a => request.AuthorIds.Contains(a.Id), cancellationToken);
 
         var book = mapper.Map<Book>(request);
 

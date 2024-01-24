@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Book;
 using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;

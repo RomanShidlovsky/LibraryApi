@@ -18,7 +18,7 @@ public class CreateGenreCommandHandler(
     {
         var repository = unitOfWork.GetRepository<IGenreRepository>();
         
-        var genre = (await repository.Get(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
+        var genre = (await repository.GetAsync(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
 
         if (genre != null)
             return new DuplicateException();

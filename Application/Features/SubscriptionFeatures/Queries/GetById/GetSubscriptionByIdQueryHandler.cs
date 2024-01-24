@@ -8,7 +8,7 @@ using Domain.Entities;
 
 namespace Application.Features.SubscriptionFeatures.Queries.GetById;
 
-public class GetSubscriptionByIdHandler(
+public class GetSubscriptionByIdQueryHandler(
     ISubscriptionRepository repository,
     IMapper mapper)
     : ISingleQueryHandler<GetSubscriptionByIdQuery, SubscriptionViewModel>

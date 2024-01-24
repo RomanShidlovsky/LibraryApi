@@ -2,6 +2,7 @@ using Application;
 using Application.Extensions;
 using Persistence;
 using Persistence.Context;
+using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.ConfigurePersistence(builder.Configuration);
 builder.Services.ConfigureApplication();
+builder.Services.ConfigureApiBehavior();
+builder.Services.ConfigureCorsPolicy();
+builder.Services.ConfigureJwtBearerAuthentication(builder.Configuration);
+//TODO: configure exception handler
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,6 @@
 ﻿namespace WebApi.Extensions;
 
-public class ErrorHandlerExtensions
+public static class ErrorHandlerExtensions
 {
     
 }

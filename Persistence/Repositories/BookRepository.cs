@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using System.Linq.Expressions;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
@@ -33,13 +34,19 @@ public class BookRepository(DataContext context) : BaseRepository<Book>(context)
             .SingleOrDefaultAsync(b => b.ISBN == isbn, cancellationToken);
     }
 
+    public override Task<List<Book>> GetAsync(Expression<Func<Book, bool>> expression, CancellationToken cancellationToken)
+    {
+        return GetBookWithNavigationProperties()
+            .Where(expression).ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> AddAuthorAsync(int bookId, int authorId, CancellationToken cancellationToken)
     {
         var book = await Context.Set<Book>()
             .Include(b => b.Authors)
             .SingleOrDefaultAsync(b => b.Id == bookId, cancellationToken);
 
-        if (book is null)
+        if (book == null)
             return false;
 
         if (!book.Authors.Any(a => a.Id == authorId))

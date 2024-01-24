@@ -19,7 +19,7 @@ public class CreateRoleCommandHandler(
     {
         var repository = unitOfWork.GetRepository<IRoleRepository>();
         
-        var role = (await repository.Get(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
+        var role = (await repository.GetAsync(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
 
         if (role != null)
             return new DuplicateException();

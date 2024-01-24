@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Book;
 using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -25,7 +26,6 @@ public class UpdateBookCommandHandler(
         var book = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (book == null)
             return new NotFoundException(request.Id, typeof(Book));
-        
         
         book.ISBN = isbn;
         book.Title = request.Title;

@@ -32,7 +32,7 @@ public class BaseRepository<T>
         Context.Remove(entity);
     }
 
-    public virtual Task<List<T>> Get(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
+    public virtual Task<List<T>> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
     {
         return Context.Set<T>().Where(expression).ToListAsync(cancellationToken);
     }

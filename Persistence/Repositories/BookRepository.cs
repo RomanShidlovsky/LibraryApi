@@ -13,7 +13,7 @@ public class BookRepository(DataContext context) : BaseRepository<Book>(context)
         return Context.Set<Book>()
             .Include(b => b.Authors)
             .Include(b => b.Genres)
-            .Include(b => b.Subscriptions.LastOrDefault());
+            .Include(b => b.Subscriptions);
     }
 
     public override Task<Book?> GetByIdAsync(int id, CancellationToken cancellationToken)

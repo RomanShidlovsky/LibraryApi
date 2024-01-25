@@ -31,6 +31,11 @@ public class Response<T>
         Errors = errors;
     }
 
+    public TOut Match<TOut>(Func<T, TOut> success, Func<string, TOut> failure)
+    {
+        return Succeeded ? success(Data) : failure(Message);
+    }
+
     public static implicit operator Response<T>(Exception exception) => new(exception.Message);
     public static implicit operator Response<T>(string errorMessage) => new(errorMessage);
     public static implicit operator Response<T>(T value) => new(value);

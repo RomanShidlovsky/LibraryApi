@@ -11,6 +11,4 @@ public static partial class StringExtensions
     {
         return Regex().IsMatch(isbn);
     }
-
-    
 }

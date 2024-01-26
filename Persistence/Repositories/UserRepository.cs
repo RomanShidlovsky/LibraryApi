@@ -8,34 +8,16 @@ namespace Persistence.Repositories;
 
 public class UserRepository(DataContext context) : BaseRepository<User>(context), IUserRepository
 {
-    private IQueryable<User> GetUserWithNavigationProperties()
+    protected override IQueryable<User> GetEntitySet()
     {
         return Context.Set<User>()
             .Include(u => u.Roles)
             .Include(u => u.Subscriptions);
     }
-
-    public override Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return GetUserWithNavigationProperties()
-            .SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
-    }
-
-    public override Task<List<User>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return GetUserWithNavigationProperties()
-            .ToListAsync(cancellationToken);
-    }
-
-    public override Task<List<User>> GetAsync(Expression<Func<User, bool>> expression, CancellationToken cancellationToken)
-    {
-        return GetUserWithNavigationProperties()
-            .Where(expression).ToListAsync(cancellationToken);
-    }
-
+    
     public Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
     {
-        return GetUserWithNavigationProperties()
+        return GetEntitySet()
             .SingleOrDefaultAsync(u => u.Username == username, cancellationToken);
     }
 
@@ -66,7 +48,7 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
     public async Task<bool> DeleteRoleAsync(int userId, int roleId, CancellationToken cancellationToken)
     {
         var user = await Context.Set<User>()
-            .Include(u => u.Id == userId)
+            .Include(u => u.Roles)
             .SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         if (user == null)

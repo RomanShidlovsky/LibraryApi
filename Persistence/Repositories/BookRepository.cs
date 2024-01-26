@@ -8,7 +8,7 @@ namespace Persistence.Repositories;
 
 public class BookRepository(DataContext context) : BaseRepository<Book>(context), IBookRepository
 {
-    private IQueryable<Book> GetBookWithNavigationProperties()
+    protected override IQueryable<Book> GetEntitySet()
     {
         return Context.Set<Book>()
             .Include(b => b.Authors)
@@ -16,30 +16,12 @@ public class BookRepository(DataContext context) : BaseRepository<Book>(context)
             .Include(b => b.Subscriptions);
     }
 
-    public override Task<Book?> GetByIdAsync(int id, CancellationToken cancellationToken)
-    {
-        return GetBookWithNavigationProperties()
-            .SingleOrDefaultAsync(b => b.Id == id, cancellationToken);
-    }
-
-    public override Task<List<Book>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return GetBookWithNavigationProperties()
-            .ToListAsync(cancellationToken);
-    }
-
     public Task<Book?> GetByIsbnAsync(string isbn, CancellationToken cancellationToken)
     {
-        return GetBookWithNavigationProperties()
+        return GetEntitySet()
             .SingleOrDefaultAsync(b => b.ISBN == isbn, cancellationToken);
     }
-
-    public override Task<List<Book>> GetAsync(Expression<Func<Book, bool>> expression, CancellationToken cancellationToken)
-    {
-        return GetBookWithNavigationProperties()
-            .Where(expression).ToListAsync(cancellationToken);
-    }
-
+    
     public async Task<bool> AddAuthorAsync(int bookId, int authorId, CancellationToken cancellationToken)
     {
         var book = await Context.Set<Book>()

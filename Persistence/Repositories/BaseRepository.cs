@@ -6,7 +6,7 @@ using Persistence.Context;
 
 namespace Persistence.Repositories;
 
-public class BaseRepository<T>
+public abstract class BaseRepository<T>
     : IBaseRepository<T> where T : BaseEntity
 {
     protected readonly DataContext Context;
@@ -32,23 +32,28 @@ public class BaseRepository<T>
         Context.Remove(entity);
     }
 
+    protected virtual IQueryable<T> GetEntitySet()
+    {
+        return Context.Set<T>();
+    }
+
     public virtual Task<List<T>> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
     {
-        return Context.Set<T>().Where(expression).ToListAsync(cancellationToken);
+        return GetEntitySet().Where(expression).ToListAsync(cancellationToken);
     }
 
     public virtual Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)
     {
-        return Context.Set<T>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return GetEntitySet().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public virtual Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return Context.Set<T>().ToListAsync(cancellationToken);
+        return GetEntitySet().ToListAsync(cancellationToken);
     }
 
     public Task<bool> ExistsAsync(int id, CancellationToken cancellationToken)
     {
-        return Context.Set<T>().AnyAsync(t => t.Id == id, cancellationToken);
+        return GetEntitySet().AnyAsync(t => t.Id == id, cancellationToken);
     }
 }

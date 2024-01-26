@@ -6,6 +6,7 @@ public class DeleteGenreCommandValidator : AbstractValidator<DeleteGenreCommand>
 {
     public DeleteGenreCommandValidator()
     {
-        RuleFor(g => g.Id).NotEmpty();
+        RuleFor(g => g.Id)
+            .NotEmpty().WithMessage("The id field is required.");
     }
 }

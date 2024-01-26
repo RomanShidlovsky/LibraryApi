@@ -6,8 +6,11 @@ public class CreateSubscriptionCommandValidator : AbstractValidator<CreateSubscr
 {
     public CreateSubscriptionCommandValidator()
     {
-        RuleFor(s => s.BookId).NotEmpty();
-        RuleFor(s => s.UserId).NotEmpty();
-        RuleFor(s => s.ShouldReturnAt).GreaterThan(DateTime.UtcNow);
+        RuleFor(s => s.BookId)
+            .NotEmpty().WithMessage("BookId is required.");
+        RuleFor(s => s.UserId)
+            .NotEmpty().WithMessage("UserId is required.");
+        RuleFor(s => s.ShouldReturnAt)
+            .GreaterThan(DateTime.UtcNow).WithMessage("ShouldReturnAt must be greater than the current UTC time.");
     }
 }

@@ -7,12 +7,12 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     public UpdateUserCommandValidator()
     {
         RuleFor(u => u.Id)
-            .NotEmpty();
+            .NotEmpty().WithMessage("Id is required.");
         RuleFor(u => u.Username)
-            .NotEmpty()
-            .MaximumLength(50);
+            .NotEmpty().WithMessage("Username is required.")
+            .MaximumLength(50).WithMessage("Username must not exceed 50 characters.");
         RuleFor(u => u.Email)
-            .NotEmpty()
-            .EmailAddress();
+            .NotEmpty().WithMessage("Email is required.")
+            .EmailAddress().WithMessage("Invalid email format.");
     }
 }

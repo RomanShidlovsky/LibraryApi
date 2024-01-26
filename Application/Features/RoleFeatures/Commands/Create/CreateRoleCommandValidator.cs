@@ -7,7 +7,7 @@ public class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
     public CreateRoleCommandValidator()
     {
         RuleFor(r => r.Name)
-            .NotEmpty()
-            .MaximumLength(15);
+            .NotEmpty().WithMessage("Name is required.")
+            .MaximumLength(15).WithMessage("Name must not exceed 15 characters.");
     }
 }

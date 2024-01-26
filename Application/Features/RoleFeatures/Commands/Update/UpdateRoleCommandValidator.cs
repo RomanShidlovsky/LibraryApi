@@ -7,9 +7,9 @@ public class UpdateRoleCommandValidator : AbstractValidator<UpdateRoleCommand>
     public UpdateRoleCommandValidator()
     {
         RuleFor(r => r.Id)
-            .NotEmpty();
+            .NotEmpty().WithMessage("Id is required.");
         RuleFor(r => r.Name)
-            .NotEmpty()
-            .MaximumLength(15);
+            .NotEmpty().WithMessage("Name is required.")
+            .MaximumLength(15).WithMessage("Name must not exceed 15 characters.");
     }
 }

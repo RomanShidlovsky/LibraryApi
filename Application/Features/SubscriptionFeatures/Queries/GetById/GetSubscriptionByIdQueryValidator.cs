@@ -6,6 +6,7 @@ public class GetSubscriptionByIdQueryValidator : AbstractValidator<GetSubscripti
 {
     public GetSubscriptionByIdQueryValidator()
     {
-        RuleFor(s => s.Id).NotEmpty();
+        RuleFor(s => s.Id)
+            .NotEmpty().WithMessage("Subscription Id is required.");
     }
 }

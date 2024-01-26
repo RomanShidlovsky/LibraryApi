@@ -6,7 +6,9 @@ public class AddBookAuthorCommandValidator : AbstractValidator<AddBookAuthorComm
 {
     public AddBookAuthorCommandValidator()
     {
-        RuleFor(c => c.AuthorId).NotEmpty();
-        RuleFor(c => c.BookId).NotEmpty();
+        RuleFor(c => c.AuthorId)
+            .NotEmpty().WithMessage("AuthorId is required.");
+        RuleFor(c => c.BookId)
+            .NotEmpty().WithMessage("BookId is required.");
     }
 }

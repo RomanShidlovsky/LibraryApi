@@ -6,7 +6,9 @@ public class DeleteBookGenreCommandValidator : AbstractValidator<DeleteBookGenre
 {
     public DeleteBookGenreCommandValidator()
     {
-        RuleFor(c => c.BookId).NotEmpty();
-        RuleFor(c => c.GenreId).NotEmpty();
+        RuleFor(c => c.BookId)
+            .NotEmpty().WithMessage("BookId is required.");
+        RuleFor(c => c.GenreId)
+            .NotEmpty().WithMessage("GenreId is required.");
     }
 }

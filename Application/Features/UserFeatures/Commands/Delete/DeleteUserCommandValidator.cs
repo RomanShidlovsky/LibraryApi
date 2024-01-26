@@ -6,6 +6,7 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 {
     public DeleteUserCommandValidator()
     {
-        RuleFor(c => c.Id).NotEmpty();
+        RuleFor(c => c.Id)
+            .NotEmpty().WithMessage("User Id is required.");
     }
 }

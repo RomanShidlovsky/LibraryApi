@@ -7,15 +7,14 @@ public class UpdateAuthorCommandValidator : AbstractValidator<UpdateAuthorComman
     public UpdateAuthorCommandValidator()
     {
         RuleFor(a => a.Id)
-            .NotEmpty();
+            .NotEmpty().WithMessage("The Id field is required.");
         RuleFor(a => a.FirstName)
-            .NotEmpty()
-            .MaximumLength(25);
+            .NotEmpty().WithMessage("The FirstName field is required.")
+            .MaximumLength(25).WithMessage("The FirstName must not exceed 25 characters.");
         RuleFor(a => a.LastName)
-            .NotEmpty()
-            .MaximumLength(25);
+            .NotEmpty().WithMessage("The LastName field is required.")
+            .MaximumLength(25).WithMessage("The LastName must not exceed 25 characters.");
         RuleFor(a => a.FullName)
-            .NotEmpty()
-            .MaximumLength(100);
+            .MaximumLength(100).WithMessage("The FullName must not exceed 100 characters.");
     }
 }

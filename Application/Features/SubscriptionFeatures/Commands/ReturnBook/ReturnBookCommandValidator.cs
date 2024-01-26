@@ -6,6 +6,7 @@ public class ReturnBookCommandValidator : AbstractValidator<ReturnBookCommand>
 {
     public ReturnBookCommandValidator()
     {
-        RuleFor(r => r.BookId).NotEmpty();
+        RuleFor(r => r.BookId)
+            .NotEmpty().WithMessage("Book Id is required.");
     }
 }

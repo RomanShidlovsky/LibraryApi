@@ -8,6 +8,7 @@ public class GetRoleByIdQueryValidator : AbstractValidator<GetGenreByIdQuery>
 {
     public GetRoleByIdQueryValidator()
     {
-        RuleFor(r => r.Id).NotEmpty();
+        RuleFor(r => r.Id)
+            .NotEmpty().WithMessage("Genre Id is required.");
     }
 }

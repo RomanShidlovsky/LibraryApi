@@ -1,13 +1,13 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Application.Extensions;
+namespace Application.Helpers;
 
-public static partial class StringExtensions
+public static partial class IsbnHelper
 {
     [GeneratedRegex("^(?=(?:[^0-9]*[0-9]){10}(?:(?:[^0-9]*[0-9]){3})?$)[\\\\d-]+$")]
     private static partial Regex Regex();
 
-    public static bool IsValidISBN(this string isbn)
+    public static bool IsValidIsbn(string isbn)
     {
         return Regex().IsMatch(isbn);
     }

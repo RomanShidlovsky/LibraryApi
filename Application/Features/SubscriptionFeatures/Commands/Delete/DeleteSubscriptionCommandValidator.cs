@@ -6,6 +6,7 @@ public class DeleteSubscriptionCommandValidator : AbstractValidator<DeleteSubscr
 {
     public DeleteSubscriptionCommandValidator()
     {
-        RuleFor(s => s.Id).NotEmpty();
+        RuleFor(s => s.Id)
+            .NotEmpty().WithMessage("Subscription Id is required.");
     }
 }

@@ -1,42 +1,24 @@
-﻿using Application.Exceptions;
+﻿using Domain.Errors;
 
 namespace Application.Wrappers;
 
-public class Response<T>
+public class Response
 {
-    public bool Succeeded { get; set; }
-    public string Message { get; set; }
-    public List<ErrorModel> Errors { get; set; } = [];
-    public T Data { get; set; }
-    
-    public Response() { }
+    public bool Succeeded { get; protected set; }
+    public Error Error { get; protected set; }
 
-    public Response(T data, string message = "")
+    protected Response(bool success, Error error)
     {
-        Succeeded = true;
-        Message = message;
-        Data = data;
+        if (success ^ error == Error.None)
+            throw new InvalidOperationException();
+
+        Succeeded = success;
+        Error = error;
     }
 
-    public Response(string message)
-    {
-        Succeeded = false;
-        Message = message;
-    }
-    
-    public Response(string message, List<ErrorModel> errors)
-    {
-        Succeeded = false;
-        Message = message;
-        Errors = errors;
-    }
+    public static Response Success() => new(true, Error.None);
+    public static Response Failure(Error error) => new(false, error);
 
-    public TOut Match<TOut>(Func<T, TOut> success, Func<string, TOut> failure)
-    {
-        return Succeeded ? success(Data) : failure(Message);
-    }
-
-    public static implicit operator Response<T>(Exception exception) => new(exception.Message);
-    public static implicit operator Response<T>(string errorMessage) => new(errorMessage);
-    public static implicit operator Response<T>(T value) => new(value);
+    public static Response<T> Success<T>(T value) => new(value, true, Error.None);
+    public static Response<T> Failure<T>(Error error, T value = default) => new(value, false, error);
 }

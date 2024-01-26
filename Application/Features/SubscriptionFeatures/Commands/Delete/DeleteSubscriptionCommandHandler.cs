@@ -1,11 +1,10 @@
 ﻿using Application.DTOs.Subscription;
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.SubscriptionFeatures.Commands.Delete;
 
@@ -21,7 +20,7 @@ public class DeleteSubscriptionCommandHandler(
         var subscription = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (subscription == null)
-            return new NotFoundException(request.Id, typeof(Subscription));
+            return Response.Failure<SubscriptionViewModel>(DomainErrors.Subscription.SubscriptionNotFoundById);
         
         repository.Delete(subscription);
         await unitOfWork.SaveAsync(cancellationToken);

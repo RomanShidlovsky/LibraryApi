@@ -1,12 +1,11 @@
-﻿using Application.DTOs.Genre;
-using Application.DTOs.Role;
-using Application.Exceptions;
+﻿using Application.DTOs.Role;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.RoleFeatures.Commands.Update;
 
@@ -22,7 +21,7 @@ public class UpdateRoleCommandHandler(
         var role = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (role == null)
-            return new NotFoundException(request.Id, typeof(Role));
+            return Response.Failure<RoleViewModel>(DomainErrors.Role.RoleNotFoundById);
 
         var updatedRole = mapper.Map<Role>(request);
         

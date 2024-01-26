@@ -1,11 +1,11 @@
 ﻿using Application.DTOs.Genre;
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.GenreFeatures.Commands.Create;
 
@@ -21,7 +21,7 @@ public class CreateGenreCommandHandler(
         var genre = (await repository.GetAsync(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
 
         if (genre != null)
-            return new DuplicateException();
+            return Response.Failure<GenreViewModel>(DomainErrors.Genre.NameConflict);
 
         var newGenre = mapper.Map<Genre>(request);
         repository.Create(newGenre);

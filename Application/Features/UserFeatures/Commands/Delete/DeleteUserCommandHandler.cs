@@ -1,11 +1,10 @@
 ﻿using Application.DTOs.User;
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.UserFeatures.Commands.Delete;
 
@@ -21,7 +20,7 @@ public class DeleteUserCommandHandler(
         var user = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (user == null)
-            return new NotFoundException(request.Id, typeof(User));
+            return Response.Failure<UserViewModel>(DomainErrors.User.UserNotFoundById);
         
         repository.Delete(user);
         await unitOfWork.SaveAsync(cancellationToken);

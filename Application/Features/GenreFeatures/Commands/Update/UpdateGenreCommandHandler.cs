@@ -1,12 +1,11 @@
 ﻿using Application.DTOs.Genre;
-using Application.Exceptions;
-using Application.Features.GenreFeatures.Commands.Delete;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.GenreFeatures.Commands.Update;
 
@@ -19,10 +18,15 @@ public class UpdateGenreCommandHandler(
     {
         var repository = unitOfWork.GetRepository<IGenreRepository>();
         
+        var existingGenre = (await repository.GetAsync(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
+
+        if (existingGenre != null)
+            return Response.Failure<GenreViewModel>(DomainErrors.Genre.NameConflict);
+        
         var genre = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (genre == null)
-            return new NotFoundException(request.Id, typeof(Genre));
+            return Response.Failure<GenreViewModel>(DomainErrors.Genre.GenreNotFoundById);
 
         var updatedGenre = mapper.Map<Genre>(request);
         

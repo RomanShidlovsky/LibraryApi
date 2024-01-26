@@ -2,19 +2,26 @@
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using Domain.Errors;
+using MediatR;
 
 namespace Application.Features.UserFeatures.Commands.AddRole;
 
 public class AddUserRoleCommandHandler(IUnitOfWork unitOfWork)
-    : IUpdateCommandHandler<AddUserRoleCommand, bool>
+    : IRequestHandler<AddUserRoleCommand, Response>
 {
-    public async Task<Response<bool>> Handle(AddUserRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(AddUserRoleCommand request, CancellationToken cancellationToken)
     {
-        var result = await unitOfWork.GetRepository<IUserRepository>()
+        var succeeded = await unitOfWork.GetRepository<IUserRepository>()
             .AddRoleAsync(request.UserId, request.RoleId, cancellationToken);
 
-        await unitOfWork.SaveAsync(cancellationToken);
+        if (succeeded)
+        {
+            await unitOfWork.SaveAsync(cancellationToken);
+        }
 
-        return result;
+        return succeeded
+            ? Response.Success()
+            : Response.Failure(DomainErrors.User.RoleNotAdded);
     }
 }

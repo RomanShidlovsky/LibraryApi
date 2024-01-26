@@ -1,12 +1,11 @@
-﻿using Application.DTOs.Genre;
-using Application.DTOs.Role;
-using Application.Exceptions;
+﻿using Application.DTOs.Role;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.RoleFeatures.Commands.Create;
 
@@ -22,7 +21,7 @@ public class CreateRoleCommandHandler(
         var role = (await repository.GetAsync(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
 
         if (role != null)
-            return new DuplicateException();
+            return Response.Failure<RoleViewModel>(DomainErrors.Role.NameConflict);
 
         var newRole = mapper.Map<Role>(request);
         repository.Create(newRole);

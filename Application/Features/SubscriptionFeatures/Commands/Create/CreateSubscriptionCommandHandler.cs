@@ -1,11 +1,11 @@
 ﻿using Application.DTOs.Subscription;
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.SubscriptionFeatures.Commands.Create;
 
@@ -19,14 +19,14 @@ public class CreateSubscriptionCommandHandler(
     {
         var book = await unitOfWork.GetRepository<IBookRepository>().GetByIdAsync(request.BookId, cancellationToken);
         if (book == null)
-            return new NotFoundException(request.BookId, typeof(Book));
+            return Response.Failure<SubscriptionViewModel>(DomainErrors.Book.BookNotFoundById);
 
         if (book.Subscriptions.Any(s => s.IsActive))
-            return new InvalidOperationException("Book is already taken.");
+            return Response.Failure<SubscriptionViewModel>(DomainErrors.Subscription.BookAlreadyTaken);
         
         var user = await unitOfWork.GetRepository<IUserRepository>().GetByIdAsync(request.UserId, cancellationToken);
         if (user == null)
-            return new NotFoundException(request.UserId, typeof(User));
+            return Response.Failure<SubscriptionViewModel>(DomainErrors.User.UserNotFoundById);
 
         var subscription = mapper.Map<Subscription>(request);
 

@@ -1,10 +1,9 @@
 ﻿using Application.DTOs.Genre;
-using Application.Exceptions;
 using Application.Interfaces.Queries;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.GenreFeatures.Queries.GetById;
 
@@ -15,11 +14,10 @@ public class GetGenreByIdQueryHandler(
 {
     public async Task<Response<GenreViewModel>> Handle(GetGenreByIdQuery request, CancellationToken cancellationToken)
     {
-        var genre =  await repository.GetByIdAsync(request.Id, cancellationToken);
+        var genre = await repository.GetByIdAsync(request.Id, cancellationToken);
 
-        if (genre is null)
-            return new NotFoundException(request.Id, typeof(Genre));
-
-        return mapper.Map<GenreViewModel>(genre);
+        return genre == null
+            ? Response.Failure<GenreViewModel>(DomainErrors.Genre.GenreNotFoundById)
+            : mapper.Map<GenreViewModel>(genre); 
     }
 }

@@ -2,19 +2,26 @@
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using Domain.Errors;
+using MediatR;
 
 namespace Application.Features.BookFeatures.Commands.AddAuthor;
 
 public class AddBookAuthorCommandHandler(IUnitOfWork unitOfWork)
-    : IUpdateCommandHandler<AddBookAuthorCommand, bool>
+    : IRequestHandler<AddBookAuthorCommand, Response>
 {
-    public async Task<Response<bool>> Handle(AddBookAuthorCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(AddBookAuthorCommand request, CancellationToken cancellationToken)
     {
-        var result = await unitOfWork.GetRepository<IBookRepository>()
+        var succeeded = await unitOfWork.GetRepository<IBookRepository>()
             .AddAuthorAsync(request.BookId, request.AuthorId, cancellationToken);
 
-        await unitOfWork.SaveAsync(cancellationToken);
+        if (succeeded)
+        {
+            await unitOfWork.SaveAsync(cancellationToken);
+        }
 
-        return result;
+        return succeeded
+            ? Response.Success()
+            : Response.Failure(DomainErrors.Book.AuthorNotAdded);
     }
 }

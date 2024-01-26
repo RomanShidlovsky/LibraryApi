@@ -7,6 +7,7 @@ using Application.Features.AuthorFeatures.Queries.GetAll;
 using Application.Features.BookFeatures.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Controllers.Helpers;
 
 namespace WebApi.Controllers;
 
@@ -22,7 +23,7 @@ public class AuthorController(IMediator mediator) : ControllerBase
         var query = new GetAllAuthorsQuery();
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpGet("{id:int}")]
@@ -33,7 +34,7 @@ public class AuthorController(IMediator mediator) : ControllerBase
         var query = new GetBookByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPost]
@@ -43,7 +44,7 @@ public class AuthorController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpDelete("{id:int}")]
@@ -54,7 +55,7 @@ public class AuthorController(IMediator mediator) : ControllerBase
         var command = new DeleteAuthorCommand(id);
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPut]
@@ -64,6 +65,6 @@ public class AuthorController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
         
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 }

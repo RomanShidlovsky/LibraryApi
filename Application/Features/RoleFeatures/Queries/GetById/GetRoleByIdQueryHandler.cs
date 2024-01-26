@@ -1,11 +1,9 @@
-﻿using Application.DTOs.Genre;
-using Application.DTOs.Role;
-using Application.Exceptions;
+﻿using Application.DTOs.Role;
 using Application.Interfaces.Queries;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.RoleFeatures.Queries.GetById;
 
@@ -18,9 +16,8 @@ public class GetRoleByIdQueryHandler(
     {
         var role =  await repository.GetByIdAsync(request.Id, cancellationToken);
 
-        if (role is null)
-            return new NotFoundException(request.Id, typeof(Role));
-
-        return mapper.Map<RoleViewModel>(role);
+        return role == null
+            ? Response.Failure<RoleViewModel>(DomainErrors.Role.RoleNotFoundById) 
+            : mapper.Map<RoleViewModel>(role);
     }
 }

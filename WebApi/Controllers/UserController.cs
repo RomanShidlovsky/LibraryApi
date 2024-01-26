@@ -11,6 +11,7 @@ using Application.Features.UserFeatures.Queries.GetAll;
 using Application.Features.UserFeatures.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Controllers.Helpers;
 
 namespace WebApi.Controllers;
 
@@ -26,7 +27,7 @@ public class UserController(IMediator mediator) : ControllerBase
         var query = new GetAllUsersQuery();
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpGet("{id:int}")]
@@ -37,7 +38,7 @@ public class UserController(IMediator mediator) : ControllerBase
         var query = new GetUserByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPost(nameof(Register))]
@@ -47,7 +48,7 @@ public class UserController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpPost(nameof(Login))]
@@ -57,7 +58,7 @@ public class UserController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpDelete("{id:int}")]
@@ -68,7 +69,7 @@ public class UserController(IMediator mediator) : ControllerBase
         var command = new DeleteUserCommand(id);
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPut]
@@ -78,7 +79,7 @@ public class UserController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpPut(nameof(AddRole))]
@@ -88,7 +89,7 @@ public class UserController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpPut(nameof(DeleteRole))]
@@ -98,6 +99,6 @@ public class UserController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
 }

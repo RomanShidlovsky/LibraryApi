@@ -7,6 +7,7 @@ using Application.Features.SubscriptionFeatures.Queries.GetAll;
 using Application.Features.SubscriptionFeatures.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Controllers.Helpers;
 
 namespace WebApi.Controllers;
 
@@ -22,7 +23,7 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
         var query = new GetAllSubscriptionsQuery();
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpGet("{id:int}")]
@@ -33,7 +34,7 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
         var query = new GetSubscriptionByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPost]
@@ -43,7 +44,7 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpDelete("{id:int}")]
@@ -54,7 +55,7 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
         var command = new DeleteSubscriptionCommand(id);
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPut("ReturnBook/{bookId:int}")]
@@ -65,6 +66,6 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
         var command = new ReturnBookCommand(bookId);
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
 }

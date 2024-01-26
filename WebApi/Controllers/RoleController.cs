@@ -7,6 +7,7 @@ using Application.Features.RoleFeatures.Queries.GetAll;
 using Application.Features.RoleFeatures.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Controllers.Helpers;
 
 namespace WebApi.Controllers;
 
@@ -22,7 +23,7 @@ public class RoleController(IMediator mediator) : ControllerBase
         var query = new GetAllRolesQuery();
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpGet("{id:int}")]
@@ -33,7 +34,7 @@ public class RoleController(IMediator mediator) : ControllerBase
         var query = new GetRoleByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPost]
@@ -43,7 +44,7 @@ public class RoleController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpDelete("{id:int}")]
@@ -54,7 +55,7 @@ public class RoleController(IMediator mediator) : ControllerBase
         var command = new DeleteRoleCommand(id);
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPut]
@@ -64,6 +65,6 @@ public class RoleController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 }

@@ -2,19 +2,26 @@
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using Domain.Errors;
+using MediatR;
 
 namespace Application.Features.UserFeatures.Commands.DeleteRole;
 
 public class DeleteUserRoleCommandHandler(IUnitOfWork unitOfWork)
-    : IUpdateCommandHandler<DeleteUserRoleCommand, bool>
+    : IRequestHandler<DeleteUserRoleCommand, Response>
 {
-    public async Task<Response<bool>> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
     {
-        var result = await unitOfWork.GetRepository<IUserRepository>()
+        var succeeded = await unitOfWork.GetRepository<IUserRepository>()
             .DeleteRoleAsync(request.UserId, request.RoleId, cancellationToken);
 
-        await unitOfWork.SaveAsync(cancellationToken);
+        if (succeeded)
+        {
+            await unitOfWork.SaveAsync(cancellationToken);
+        }
 
-        return result;
+        return succeeded
+            ? Response.Success()
+            : Response.Failure(DomainErrors.User.RoleNotDeleted);
     }
 }

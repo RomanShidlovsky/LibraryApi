@@ -12,6 +12,7 @@ using Application.Features.BookFeatures.Queries.GetById;
 using Application.Features.BookFeatures.Queries.GetByISBN;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Controllers.Helpers;
 
 namespace WebApi.Controllers;
 
@@ -27,7 +28,7 @@ public class BookController(IMediator mediator) : ControllerBase
         var query = new GetAllBooksQuery();
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpGet("{id:int}")]
@@ -38,7 +39,7 @@ public class BookController(IMediator mediator) : ControllerBase
         var query = new GetBookByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpGet("ISBN/{isbn}")]
@@ -49,7 +50,7 @@ public class BookController(IMediator mediator) : ControllerBase
         var query = new GetBookByIsbnQuery(isbn);
         var result = await mediator.Send(query, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
     
 
@@ -60,7 +61,7 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpDelete("{id:int}")]
@@ -71,7 +72,7 @@ public class BookController(IMediator mediator) : ControllerBase
         var command = new DeleteBookCommand(id);
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, NotFound);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPut]
@@ -81,7 +82,7 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match<IActionResult>(Ok, BadRequest);
+        return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPut(nameof(AddAuthor))]
@@ -91,7 +92,7 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpPut(nameof(DeleteAuthor))]
@@ -101,7 +102,7 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpPut(nameof(AddGenre))]
@@ -111,7 +112,7 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
     
     [HttpPut(nameof(DeleteGenre))]
@@ -121,6 +122,6 @@ public class BookController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Data ? Ok("Success.") : BadRequest(result.Message);
+        return ApiResponse.GetObjectResult(result);
     }
 }

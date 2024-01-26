@@ -6,7 +6,9 @@ using MediatR;
 namespace Application.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    : IPipelineBehavior<TRequest, TResponse> 
+    where TRequest : IRequest<TResponse>
+    where TResponse : Response
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
@@ -21,32 +23,32 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
         var failures = validationResults
             .SelectMany(r => r.Errors)
             .Where(f => f != null)
-            /*.Select(f => new Error(
+            .Select(f => new Error(
                 f.PropertyName,
-                f.ErrorMessage))*/
+                f.ErrorMessage))
             .Distinct()
             .ToList();
 
         if (failures.Count != 0)
-            throw new Exceptions.ValidationException(failures);
+            return CreateValidationFailedResponse<TResponse>(failures);
 
         return await next();
     }
     
-    /*private static TResult CreateValidationResult<TResult>(Error[] errors)
-        where TResult : Response<>
+    private static TResult CreateValidationFailedResponse<TResult>(IEnumerable<Error> errors)
+        where TResult : Response
     {
-        if (typeof(TResult) == typeof(Result))
+        if (typeof(TResult) == typeof(Response))
         {
-            return (ValidationResult.WithErrors(errors) as TResult)!;
+            return (ValidationFailedResponse.WithErrors(errors) as TResult)!;
         }
 
-        object validationResult = typeof(ValidationResult<>)
+        var validationResult = typeof(ValidationFailedResponse)
             .GetGenericTypeDefinition()
             .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
-            .GetMethod(nameof(ValidationResult.WithErrors))!
-            .Invoke(null, new object?[] { errors })!;
+            .GetMethod(nameof(ValidationFailedResponse.WithErrors))!
+            .Invoke(null, [errors])!;
 
         return (TResult)validationResult;
-    }*/
+    }
 }

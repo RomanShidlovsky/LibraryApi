@@ -1,28 +1,27 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
-using Application.Interfaces.Commands;
+﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
-using Domain.Entities;
+using Domain.Errors;
+using MediatR;
 
 namespace Application.Features.SubscriptionFeatures.Commands.ReturnBook;
 
 public class ReturnBookCommandHandler(IUnitOfWork unitOfWork) :
-    IUpdateCommandHandler<ReturnBookCommand, bool>
+    IRequestHandler<ReturnBookCommand, Response>
 {
-    public async Task<Response<bool>> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
     {
         var book = await unitOfWork.GetRepository<IBookRepository>().GetByIdAsync(request.BookId, cancellationToken);
         if (book == null)
-            return new NotFoundException(request.BookId, typeof(Book));
+            return Response.Failure(DomainErrors.Book.BookNotFoundById);
 
         var subscription = book.Subscriptions.LastOrDefault();
         if (subscription == null || !subscription.IsActive)
-            return new InvalidOperationException("Book already returned.");
+            return Response.Failure(DomainErrors.Subscription.BookAlreadyReturned);
 
         subscription.ReturnBook();
         await unitOfWork.SaveAsync(cancellationToken);
 
-        return true;
+        return Response.Success();
     }
 }

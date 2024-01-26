@@ -1,8 +1,10 @@
 ﻿using Application.Interfaces.Commands;
+using Application.Wrappers;
+using MediatR;
 
 namespace Application.Features.BookFeatures.Commands.DeleteAuthor;
 
 public sealed record DeleteBookAuthorCommand(
     int BookId,
     int AuthorId)
-    : IUpdateCommand<bool>;
+    : IRequest<Response>;

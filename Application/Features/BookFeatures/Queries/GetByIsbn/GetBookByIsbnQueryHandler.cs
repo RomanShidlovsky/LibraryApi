@@ -1,9 +1,9 @@
 ﻿using Application.DTOs.Book;
-using Application.Exceptions;
 using Application.Interfaces.Queries;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
+using Domain.Errors;
 
 namespace Application.Features.BookFeatures.Queries.GetByISBN;
 
@@ -16,9 +16,8 @@ public class GetBookByIsbnQueryHandler(
     {
         var book = await repository.GetByIsbnAsync(request.ISBN, cancellationToken);
 
-        if (book == null)
-            return new NotFoundException($"Book with ISBN: {request.ISBN} not found.");
-
-        return mapper.Map<BookViewModel>(book);
+        return book == null
+            ? Response.Failure<BookViewModel>(DomainErrors.Book.BookNotFoundByIsbn) 
+            : mapper.Map<BookViewModel>(book);
     }
 }

@@ -2,19 +2,26 @@
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using Domain.Errors;
+using MediatR;
 
 namespace Application.Features.BookFeatures.Commands.AddGenre;
 
 public class AddBookGenreCommandHandler(IUnitOfWork unitOfWork)
-    : IUpdateCommandHandler<AddBookGenreCommand, bool>
+    : IRequestHandler<AddBookGenreCommand, Response>
 {
-    public async Task<Response<bool>> Handle(AddBookGenreCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(AddBookGenreCommand request, CancellationToken cancellationToken)
     {
-        var result = await unitOfWork.GetRepository<IBookRepository>()
+        var succeeded = await unitOfWork.GetRepository<IBookRepository>()
             .AddGenreAsync(request.BookId, request.GenreId, cancellationToken);
 
-        await unitOfWork.SaveAsync(cancellationToken);
+        if (succeeded)
+        {
+            await unitOfWork.SaveAsync(cancellationToken);
+        }
 
-        return result;
+        return succeeded
+            ? Response.Success()
+            : Response.Failure(DomainErrors.Book.GenreNotAdded);
     }
 }

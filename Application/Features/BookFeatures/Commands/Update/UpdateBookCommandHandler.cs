@@ -1,11 +1,10 @@
 ﻿using Application.DTOs.Book;
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.BookFeatures.Commands.Update;
 
@@ -21,11 +20,11 @@ public class UpdateBookCommandHandler(
 
         var existingBook = await repository.GetByIsbnAsync(isbn, cancellationToken);
         if (existingBook != null)
-            return new DuplicateException();
+            return Response.Failure<BookViewModel>(DomainErrors.Book.IsbnConflict);
 
         var book = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (book == null)
-            return new NotFoundException(request.Id, typeof(Book));
+            return Response.Failure<BookViewModel>(DomainErrors.Book.BookNotFoundById);
         
         book.ISBN = isbn;
         book.Title = request.Title;

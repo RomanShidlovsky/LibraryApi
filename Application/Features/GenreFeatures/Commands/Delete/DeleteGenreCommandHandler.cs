@@ -1,11 +1,10 @@
 ﻿using Application.DTOs.Genre;
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Errors;
 
 namespace Application.Features.GenreFeatures.Commands.Delete;
 
@@ -21,7 +20,7 @@ public class DeleteGenreCommandHandler(
         var genre = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (genre == null)
-            return new NotFoundException(request.Id, typeof(Genre));
+            return Response.Failure<GenreViewModel>(DomainErrors.Genre.GenreNotFoundById);
         
         repository.Delete(genre);
         await unitOfWork.SaveAsync(cancellationToken);

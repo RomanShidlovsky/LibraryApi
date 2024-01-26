@@ -4,6 +4,7 @@ using Application.Interfaces.Authentication;
 using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using Domain.Errors;
 
 namespace Application.Features.UserFeatures.Commands.Login;
 
@@ -18,14 +19,14 @@ public class LoginUserCommandHandler(
             .GetByUsernameAsync(request.Username, cancellationToken);
 
         if (user == null)
-            return new InvalidDataException("Incorrect username or password.");
+            return Response.Failure<string>(DomainErrors.User.InvalidCredentials);
 
         var passwordHash = HashHelper.GetPasswordHash(request.Password);
         if (passwordHash != user.Password)
-            return new InvalidDataException("Incorrect username or password.");
+            return Response.Failure<string>(DomainErrors.User.InvalidCredentials);
 
         var token = jwtTokenProvider.GetJwtToken(user);
 
-        return new Response<string>(token);
+        return token;
     }
 }

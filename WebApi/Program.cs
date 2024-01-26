@@ -13,7 +13,6 @@ builder.Services.ConfigureApplication();
 builder.Services.ConfigureApiBehavior();
 builder.Services.ConfigureCorsPolicy();
 builder.Services.ConfigureJwtBearerAuthentication(builder.Configuration);
-//TODO: configure exception handler
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -32,6 +31,7 @@ var serviceScope = app.Services.CreateScope();
 var dataContext = serviceScope.ServiceProvider.GetService<DataContext>();
 dataContext?.Database.EnsureCreated();
 
-
+app.UseErrorHandler();
+app.UseCors();
 app.MapControllers();
 app.Run();

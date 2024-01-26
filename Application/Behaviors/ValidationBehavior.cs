@@ -43,7 +43,7 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
             return (ValidationFailedResponse.WithErrors(errors) as TResult)!;
         }
 
-        var validationResult = typeof(ValidationFailedResponse)
+        var validationResult = typeof(ValidationFailedResponse<>)
             .GetGenericTypeDefinition()
             .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
             .GetMethod(nameof(ValidationFailedResponse.WithErrors))!

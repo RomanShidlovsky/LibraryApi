@@ -6,27 +6,31 @@ using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Errors;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.RoleFeatures.Commands.Create;
 
 public class CreateRoleCommandHandler(
-    IUnitOfWork unitOfWork,
+    RoleManager<Role> roleManager,
     IMapper mapper)
     : ICreateCommandHandler<CreateRoleCommand, RoleViewModel>
 {
     public async Task<Response<RoleViewModel>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-        var repository = unitOfWork.GetRepository<IRoleRepository>();
-        
-        var role = (await repository.GetAsync(g => g.Name == request.Name, cancellationToken)).SingleOrDefault();
-
+        var role = await roleManager.FindByNameAsync(request.Name);
         if (role != null)
             return Response.Failure<RoleViewModel>(DomainErrors.Role.NameConflict);
 
         var newRole = mapper.Map<Role>(request);
-        repository.Create(newRole);
-        await unitOfWork.SaveAsync(cancellationToken);
+        newRole.ConcurrencyStamp = Guid.NewGuid().ToString();
 
-        return mapper.Map<RoleViewModel>(newRole);
+        var result = await roleManager.CreateAsync(newRole);
+
+        return result.Succeeded
+            ? mapper.Map<RoleViewModel>(newRole)
+            : Response.Failure<RoleViewModel>(new Error(
+                result.Errors.First().Code,
+                result.Errors.First().Description,
+                400));
     }
 }

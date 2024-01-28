@@ -2,8 +2,9 @@
 
 namespace Domain.Entities;
 
-public class Subscription : BaseEntity
+public class Subscription : IBaseEntity
 {
+    public int Id { get; set; }
     public int BookId { get; set; }
     public virtual Book Book { get; set; }
     
@@ -13,7 +14,9 @@ public class Subscription : BaseEntity
     public DateTime TakenAt { get; set; }
     public DateTime ShouldReturnAt { get; set; }
     public bool IsActive { get; set; }
-
+    public DateTimeOffset DateCreated { get; set; }
+    public DateTimeOffset? DateUpdated { get; set; }
+    
     public void ReturnBook()
     {
         if (!IsActive)

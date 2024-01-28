@@ -6,8 +6,9 @@ public class DeleteUserRoleCommandValidator : AbstractValidator<DeleteUserRoleCo
 {
     public DeleteUserRoleCommandValidator()
     {
-        RuleFor(c => c.RoleId)
-            .NotEmpty().WithMessage("RoleId is required.");
+        RuleFor(c => c.RoleName)
+            .NotEmpty().WithMessage("Name is required.")
+            .MaximumLength(15).WithMessage("Name must not exceed 15 characters.");
         RuleFor(c => c.UserId)
             .NotEmpty().WithMessage("UserId is required.");
     }

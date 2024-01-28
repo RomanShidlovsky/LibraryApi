@@ -11,7 +11,6 @@ public class BookMapper : AutoMapper.Profile
     {
         CreateMap<CreateBookCommand, Book>();
         CreateMap<Book, BookViewModel>()
-            .ForMember(dest => dest.LastSubscription, 
-                opt => opt.MapFrom(src => src.Subscriptions.LastOrDefault()));
+            .ReverseMap();
     }
 }

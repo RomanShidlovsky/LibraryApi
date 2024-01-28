@@ -1,6 +1,6 @@
 ﻿namespace Domain.Common;
 
-public abstract class BaseEntity
+public interface IBaseEntity
 {
     public int Id { get; set; }
     public DateTimeOffset DateCreated { get; set; }

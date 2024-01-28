@@ -5,7 +5,6 @@ namespace Application.Features.BookFeatures.Commands.Update;
 
 public sealed record UpdateBookCommand(
     int Id,
-    string ISBN,
     string Title,
     string? Description)
     : IUpdateCommand<BookViewModel>;

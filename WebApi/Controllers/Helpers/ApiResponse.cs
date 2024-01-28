@@ -21,7 +21,7 @@ public static class ApiResponse
     public static ObjectResult GetObjectResult(Response response)
     {
         return response.Succeeded
-            ? new ObjectResult(response)
+            ? new ObjectResult(response.Succeeded)
                 { StatusCode = 200, ContentTypes = { "application/json" } }
             : response is IValidationFailedResponse validationError
                 ? new ObjectResult(validationError.Errors)

@@ -4,8 +4,11 @@ using Application.Features.AuthorFeatures.Commands.Create;
 using Application.Features.AuthorFeatures.Commands.Delete;
 using Application.Features.AuthorFeatures.Commands.Update;
 using Application.Features.AuthorFeatures.Queries.GetAll;
-using Application.Features.BookFeatures.Queries.GetById;
+using Application.Features.AuthorFeatures.Queries.GetById;
+using Application.Wrappers;
+using Domain.Errors;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Controllers.Helpers;
 
@@ -16,6 +19,7 @@ namespace WebApi.Controllers;
 public class AuthorController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -27,19 +31,21 @@ public class AuthorController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(AuthorViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        var query = new GetBookByIdQuery(id);
+        var query = new GetAuthorByIdQuery(id);
         var result = await mediator.Send(query, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(AuthorViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     public async Task<IActionResult> Create(CreateAuthorCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -48,8 +54,9 @@ public class AuthorController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(AuthorViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteAuthorCommand(id);
@@ -59,8 +66,11 @@ public class AuthorController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(AuthorViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
+    [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
+    [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Update(UpdateAuthorCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);

@@ -7,7 +7,7 @@ using Persistence.Context;
 namespace Persistence.Repositories;
 
 public abstract class BaseRepository<T>
-    : IBaseRepository<T> where T : BaseEntity
+    : IBaseRepository<T> where T : class, IBaseEntity
 {
     protected readonly DataContext Context;
 
@@ -16,18 +16,18 @@ public abstract class BaseRepository<T>
         Context = context;
     }
 
-    public void Create(T entity)
+    public virtual void Create(T entity)
     {
         Context.Add(entity);
     }
 
-    public void Update(T entity)
+    public virtual void Update(T entity)
     {
         entity.DateUpdated = DateTimeOffset.Now;
         Context.Update(entity);
     }
 
-    public void Delete(T entity)
+    public virtual void Delete(T entity)
     {
         Context.Remove(entity);
     }

@@ -2,10 +2,11 @@
 using Application.DTOs.Role;
 using Application.Features.RoleFeatures.Commands.Create;
 using Application.Features.RoleFeatures.Commands.Delete;
-using Application.Features.RoleFeatures.Commands.Update;
 using Application.Features.RoleFeatures.Queries.GetAll;
 using Application.Features.RoleFeatures.Queries.GetById;
+using Domain.Errors;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Controllers.Helpers;
 
@@ -16,8 +17,9 @@ namespace WebApi.Controllers;
 public class RoleController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(IEnumerable<RoleViewModel>), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var query = new GetAllRolesQuery();
@@ -27,8 +29,9 @@ public class RoleController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(RoleViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var query = new GetRoleByIdQuery(id);
@@ -38,8 +41,10 @@ public class RoleController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "SuperAdmin")]
     [ProducesResponseType(typeof(RoleViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
+    [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     public async Task<IActionResult> Create(CreateRoleCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -48,21 +53,12 @@ public class RoleController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "SuperAdmin")]
     [ProducesResponseType(typeof(RoleViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteRoleCommand(id);
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-
-    [HttpPut]
-    [ProducesResponseType(typeof(RoleViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Update(UpdateRoleCommand command, CancellationToken cancellationToken)
-    {
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

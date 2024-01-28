@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Runtime.InteropServices.JavaScript;
 using Application.DTOs.Book;
 using Application.Features.BookFeatures.Commands.AddAuthor;
 using Application.Features.BookFeatures.Commands.AddGenre;
@@ -10,7 +11,10 @@ using Application.Features.BookFeatures.Commands.Update;
 using Application.Features.BookFeatures.Queries.GetAll;
 using Application.Features.BookFeatures.Queries.GetById;
 using Application.Features.BookFeatures.Queries.GetByISBN;
+using Application.Wrappers;
+using Domain.Errors;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Controllers.Helpers;
 
@@ -21,8 +25,9 @@ namespace WebApi.Controllers;
 public class BookController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IEnumerable<BookViewModel>), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var query = new GetAllBooksQuery();
@@ -32,8 +37,9 @@ public class BookController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(BookViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var query = new GetBookByIdQuery(id);
@@ -43,8 +49,9 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpGet("ISBN/{isbn}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(BookViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetByIsbn(string isbn, CancellationToken cancellationToken)
     {
         var query = new GetBookByIsbnQuery(isbn);
@@ -55,8 +62,10 @@ public class BookController(IMediator mediator) : ControllerBase
     
 
     [HttpPost]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(BookViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Continue)]
     public async Task<IActionResult> Create(CreateBookCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -65,8 +74,9 @@ public class BookController(IMediator mediator) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(BookViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteBookCommand(id);
@@ -76,8 +86,11 @@ public class BookController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(BookViewModel), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
+    [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
+    [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Update(UpdateBookCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -86,8 +99,8 @@ public class BookController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut(nameof(AddAuthor))]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> AddAuthor(AddBookAuthorCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -96,8 +109,8 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut(nameof(DeleteAuthor))]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> DeleteAuthor(DeleteBookAuthorCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -106,8 +119,8 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut(nameof(AddGenre))]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> AddGenre(AddBookGenreCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
@@ -116,8 +129,8 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut(nameof(DeleteGenre))]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> DeleteGenre(DeleteBookGenreCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);

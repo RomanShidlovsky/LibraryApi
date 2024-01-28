@@ -76,6 +76,11 @@ public class DomainErrors
             "Role.NotFoundById",
             "Role with specified id not found.",
             404);
+        
+        public static readonly Error RoleNotFoundByName = new(
+            "Role.NotFoundByName",
+            "Role with specified name not found.",
+            404);
 
         public static readonly Error NameConflict = new(
             "Role.NameConflict",
@@ -103,6 +108,11 @@ public class DomainErrors
 
     public static class User
     {
+        public static readonly Error AlreadyInRole = new(
+            "User.AlreadyInRole",
+            "User is already in role.",
+            400);
+        
         public static readonly Error RoleNotAdded = new(
             "User.RoleNotAdded",
             "Role has not been added.",
@@ -116,6 +126,11 @@ public class DomainErrors
         public static readonly Error InvalidCredentials = new(
             "User.InvalidCredentials",
             "Invalid login or password.",
+            401);
+
+        public static readonly Error InvalidAccessOrRefreshTokenToken = new(
+            "User.InvalidAccessOrRefreshToken",
+            "Invalid access or refresh token.",
             401);
 
         public static readonly Error UserNotFoundById = new(

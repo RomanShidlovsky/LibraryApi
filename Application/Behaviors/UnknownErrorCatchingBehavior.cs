@@ -16,7 +16,7 @@ public class UnknownErrorCatchingBehavior<TRequest, TResponse>
         {
             return await next();
         }
-        catch (Exception)
+        catch (Exception e)
         {
             return (TResponse)Response.Failure(DomainErrors.UnknownError);
         }

@@ -4,28 +4,31 @@ using Application.Interfaces.Commands;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Errors;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.RoleFeatures.Commands.Delete;
 
 public class DeleteRoleCommandHandler(
-    IUnitOfWork unitOfWork,
+    RoleManager<Role> roleManager,
     IMapper mapper)
     : IDeleteCommandHandler<DeleteRoleCommand, RoleViewModel>
 {
     public async Task<Response<RoleViewModel>> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
-        var repository = unitOfWork.GetRepository<IRoleRepository>();
-        
-        var role = await repository.GetByIdAsync(request.Id, cancellationToken);
-
+        var role = await roleManager.FindByIdAsync(request.Id.ToString());
         if (role == null)
             return Response.Failure<RoleViewModel>(DomainErrors.Role.RoleNotFoundById);
-        
-        repository.Delete(role);
-        await unitOfWork.SaveAsync(cancellationToken);
 
-        return mapper.Map<RoleViewModel>(role);
+        var result = await roleManager.DeleteAsync(role);
+
+        return result.Succeeded
+            ? mapper.Map<RoleViewModel>(role)
+            : Response.Failure<RoleViewModel>(new Error(
+                result.Errors.First().Code,
+                result.Errors.First().Description,
+                400));
     }
 }
     

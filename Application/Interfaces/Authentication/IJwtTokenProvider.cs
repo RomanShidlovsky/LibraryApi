@@ -1,8 +1,10 @@
-﻿using Domain.Entities;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Domain.Entities;
 
 namespace Application.Interfaces.Authentication;
 
 public interface IJwtTokenProvider
 {
-    string GetJwtToken(User user);
+    JwtSecurityToken GetJwtToken(User user, IEnumerable<string> roles);
+    string GetRefreshToken();
 }

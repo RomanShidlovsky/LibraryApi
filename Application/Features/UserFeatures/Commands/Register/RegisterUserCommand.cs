@@ -4,7 +4,7 @@ using Application.Interfaces.Commands;
 namespace Application.Features.UserFeatures.Commands.Register;
 
 public sealed record RegisterUserCommand(
+    string UserName,
     string Email,
-    string Username,
     string Password)
     : ICreateCommand<UserViewModel>;

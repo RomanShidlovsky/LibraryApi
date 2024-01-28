@@ -1,46 +1,35 @@
-﻿using Application.Auth;
-using Application.DTOs.User;
-using Application.Interfaces;
+﻿using Application.DTOs.User;
 using Application.Interfaces.Commands;
-using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
-using Domain.Constants;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Errors;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.UserFeatures.Commands.Register;
 
-public class RegisterUserCommandHandler(
-    IUnitOfWork unitOfWork,
-    IMapper mapper)
+public class RegisterUserCommandHandler(UserManager<User> userManager, IMapper mapper)
     : ICreateCommandHandler<RegisterUserCommand, UserViewModel>
 {
     public async Task<Response<UserViewModel>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var repository = unitOfWork.GetRepository<IUserRepository>();
-
-        var existingUser = (await repository.GetAsync(u => u.Username == request.Username,
-                cancellationToken))
-            .LastOrDefault();
-
+        var existingUser = await userManager.FindByNameAsync(request.UserName);
         if (existingUser != null)
             return Response.Failure<UserViewModel>(DomainErrors.User.UsernameConflict);
 
         var user = mapper.Map<User>(request);
-        user.Password = HashHelper.GetPasswordHash(request.Password);
+        user.SecurityStamp = Guid.NewGuid().ToString();
 
-        var userRole =
-            (await unitOfWork.GetRepository<IRoleRepository>()
-                .GetAsync(r => r.Name == Roles.User, cancellationToken))
-            .LastOrDefault();
+        var result = await userManager.CreateAsync(user, request.Password);
+        if (!result.Succeeded)
+            return Response.Failure<UserViewModel>(new Error(
+                result.Errors.First().Code,
+                result.Errors.First().Description, 
+                400));
 
-        if (userRole != null)
-            user.Roles.Add(userRole);
-
-        repository.Create(user);
-        await unitOfWork.SaveAsync(cancellationToken);
-
+        await userManager.AddToRoleAsync(user, Roles.Client.ToString());
+        
         return mapper.Map<UserViewModel>(user);
     }
 }

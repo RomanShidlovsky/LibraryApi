@@ -16,17 +16,11 @@ public class UpdateBookCommandHandler(
     public async Task<Response<BookViewModel>> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
         var repository = unitOfWork.GetRepository<IBookRepository>();
-        var isbn = request.ISBN.Replace("-", "");
-
-        var existingBook = await repository.GetByIsbnAsync(isbn, cancellationToken);
-        if (existingBook != null)
-            return Response.Failure<BookViewModel>(DomainErrors.Book.IsbnConflict);
-
+        
         var book = await repository.GetByIdAsync(request.Id, cancellationToken);
         if (book == null)
             return Response.Failure<BookViewModel>(DomainErrors.Book.BookNotFoundById);
         
-        book.ISBN = isbn;
         book.Title = request.Title;
         
         if (request.Description != null)

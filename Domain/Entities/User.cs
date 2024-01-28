@@ -1,12 +1,13 @@
 ﻿using Domain.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities;
 
-public class User : BaseEntity
+public class User : IdentityUser<int>, IBaseEntity
 {
-    public string Email { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
     public virtual List<Subscription> Subscriptions { get; set; } = [];
-    public virtual List<Role> Roles { get; set; } = [];
+    public DateTimeOffset DateCreated { get; set; }
+    public DateTimeOffset? DateUpdated { get; set; }
 }

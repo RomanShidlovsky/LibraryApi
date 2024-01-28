@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Application.Interfaces.Authentication;
 using Domain.Entities;
@@ -9,16 +10,15 @@ namespace Application.Auth;
 
 public class JwtTokenProvider(JwtOptions jwtOptions) : IJwtTokenProvider
 {
-    public string GetJwtToken(User user)
+    public JwtSecurityToken GetJwtToken(User user, IEnumerable<string> roles)
     {
         var claims = new List<Claim>()
         {
             new("Id", user.Id.ToString()),
-            new("Username", user.Username),
-            new(ClaimTypes.Email, user.Email)
+            new("UserName", user.UserName),
         };
         
-        claims.AddRange(user.Roles.Select(role => new Claim(ClaimTypes.Role, role.Name)));
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
@@ -29,9 +29,17 @@ public class JwtTokenProvider(JwtOptions jwtOptions) : IJwtTokenProvider
             null,
             claims,
             null,
-            DateTime.UtcNow.AddHours(1),
+            DateTime.UtcNow.AddMinutes(jwtOptions.TokenValidityInMinutes),
             signingCredentials);
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return token;
+    }
+
+    public string GetRefreshToken()
+    {
+        var randomNumber = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
     }
 }

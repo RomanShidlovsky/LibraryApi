@@ -6,11 +6,13 @@ using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Errors;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.SubscriptionFeatures.Commands.Create;
 
 public class CreateSubscriptionCommandHandler(
     IUnitOfWork unitOfWork,
+    UserManager<User> userManager,
     IMapper mapper)
     : ICreateCommandHandler<CreateSubscriptionCommand, SubscriptionViewModel>
 {
@@ -23,12 +25,13 @@ public class CreateSubscriptionCommandHandler(
 
         if (book.Subscriptions.Any(s => s.IsActive))
             return Response.Failure<SubscriptionViewModel>(DomainErrors.Subscription.BookAlreadyTaken);
-        
-        var user = await unitOfWork.GetRepository<IUserRepository>().GetByIdAsync(request.UserId, cancellationToken);
+
+        var user = await userManager.FindByIdAsync(request.UserId.ToString());
         if (user == null)
             return Response.Failure<SubscriptionViewModel>(DomainErrors.User.UserNotFoundById);
 
         var subscription = mapper.Map<Subscription>(request);
+        subscription.IsActive = true;
 
         unitOfWork.GetRepository<ISubscriptionRepository>().Create(subscription);
         

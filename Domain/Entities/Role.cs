@@ -1,8 +1,10 @@
 ﻿using Domain.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities;
 
-public class Role : NamedEntity
+public class Role : IdentityRole<int>, IBaseEntity
 {
-    public virtual List<User> Users { get; set; } = [];
+    public DateTimeOffset DateCreated { get; set; }
+    public DateTimeOffset? DateUpdated { get; set; }
 }

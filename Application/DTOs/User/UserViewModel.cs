@@ -3,9 +3,11 @@ using Application.DTOs.Subscription;
 
 namespace Application.DTOs.User;
 
-public sealed record UserViewModel(
-    int Id,
-    string Email,
-    string Username,
-    List<SubscriptionViewModel> Subscriptions,
-    List<RoleViewModel> Roles);
+public class UserViewModel
+{
+    public int Id { get; set; }
+    public string Email { get; set; }
+    public string UserName { get; set; }
+    public IList<string> Roles { get; set; } 
+    public List<SubscriptionViewModel> Subscriptions { get; set; }
+}

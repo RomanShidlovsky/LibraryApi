@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using Application.Auth;
 using Application.Behaviors;
+using Application.Interfaces.Authentication;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,5 +18,7 @@ public static class ServiceExtensions
         
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnknownErrorCatchingBehavior<,>));
+
+        services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
     }
 }

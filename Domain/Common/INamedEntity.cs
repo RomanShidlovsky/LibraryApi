@@ -1,6 +1,6 @@
 ﻿namespace Domain.Common;
 
-public abstract class NamedEntity : BaseEntity
+public interface INamedEntity : IBaseEntity
 {
     public string Name { get; set; }
 }

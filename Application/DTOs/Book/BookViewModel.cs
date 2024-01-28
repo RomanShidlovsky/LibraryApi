@@ -11,4 +11,4 @@ public sealed record BookViewModel(
     string? Description,
     List<AuthorViewModel> Authors,
     List<GenreViewModel> Genres,
-    SubscriptionViewModel? LastSubscription);
+    List<SubscriptionViewModel> Subscriptions);

@@ -22,12 +22,14 @@ public class UpdateAuthorCommandHandler(
 
         if (author == null)
             return Response.Failure<AuthorViewModel>(DomainErrors.Author.AuthorNotFoundById);
+
+        author.FirstName = request.FirstName;
+        author.LastName = request.LastName;
+        author.FullName = request.FullName;
         
-        var updatedAuthor = mapper.Map<Author>(request);
-        
-        repository.Update(updatedAuthor);
+        repository.Update(author);
         await unitOfWork.SaveAsync(cancellationToken);
 
-        return mapper.Map<AuthorViewModel>(updatedAuthor);
+        return mapper.Map<AuthorViewModel>(author);
     }
 }

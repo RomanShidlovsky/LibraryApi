@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Features.UserFeatures.Commands.DeleteRole;
 
-public sealed record DeleteUserRoleCommand(int UserId, int RoleId) : IRequest<Response>;
+public sealed record DeleteUserRoleCommand(int UserId, string RoleName) : IRequest<Response>;

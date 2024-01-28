@@ -23,8 +23,8 @@ Connection string to MS SQL Server can be set in "ConnectionStrings/DefaultConne
 
 ```json
 "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\mssqllocaldb;Database=librarydb;Trusted_Connection=True;"
-  }
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=librarydb;Trusted_Connection=True;"
+}
 ```
 
 JWT parameters can be changed in section "JWT" inside appsettings.json
@@ -35,7 +35,7 @@ JWT parameters can be changed in section "JWT" inside appsettings.json
     "Issuer": "shidlovsky.roman",
     "TokenValidityInMinutes": 30,
     "RefreshTokenValidityInDays": 7
-  }
+}
 ```
 
 Start the server

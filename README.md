@@ -15,22 +15,28 @@ Clone the project
 
 Go to the project directory
 
-`cd ./LibraryApi/WebApi`
+```bash
+cd ./LibraryApi/WebApi
+```
 
 Connection string to MS SQL Server can be set in "ConnectionStrings/DefaultConnection" inside appsettings.json    
 
-`"ConnectionStrings": {
+```json
+"ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\mssqllocaldb;Database=librarydb;Trusted_Connection=True;"
-  }`
+  }
+```
 
 JWT parameters can be changed in section "JWT" inside appsettings.json
 
-`"Jwt": {
+```json
+"Jwt": {
     "Key": "super-secret-E47C87FF-48EC-4FB2-ABDA-514CB4B1B365",
     "Issuer": "shidlovsky.roman",
     "TokenValidityInMinutes": 30,
     "RefreshTokenValidityInDays": 7
-  }`
+  }
+```
 
 Start the server
 

@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "Enter the Bearer Authorization string as following: `Bearer JWT-ACCESS-TOKEN.`",
+        Description = "Enter the Bearer Authorization string as following: `Bearer {token}.`",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
@@ -72,6 +72,7 @@ dataContext?.Database.EnsureCreated();
 var seedInitializer = serviceScope.ServiceProvider.GetRequiredService<SeedInitializer>();
 await seedInitializer.Init();
 
+app.UseHttpsRedirection();
 app.UseCors();
 app.UseErrorHandler();
 app.UseAuthentication();

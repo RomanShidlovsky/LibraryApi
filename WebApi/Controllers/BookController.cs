@@ -99,6 +99,7 @@ public class BookController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut(nameof(AddAuthor))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> AddAuthor(AddBookAuthorCommand command, CancellationToken cancellationToken)
@@ -109,6 +110,7 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut(nameof(DeleteAuthor))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> DeleteAuthor(DeleteBookAuthorCommand command, CancellationToken cancellationToken)
@@ -119,6 +121,7 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut(nameof(AddGenre))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> AddGenre(AddBookGenreCommand command, CancellationToken cancellationToken)
@@ -129,6 +132,7 @@ public class BookController(IMediator mediator) : ControllerBase
     }
     
     [HttpPut(nameof(DeleteGenre))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> DeleteGenre(DeleteBookGenreCommand command, CancellationToken cancellationToken)

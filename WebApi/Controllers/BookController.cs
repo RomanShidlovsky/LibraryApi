@@ -1,11 +1,10 @@
 ﻿using System.Net;
 using System.Runtime.InteropServices.JavaScript;
 using Application.DTOs.Book;
-using Application.Features.BookFeatures.Commands.AddAuthor;
+using Application.Features.AuthorFeatures.Commands.AddAuthorToBook;
 using Application.Features.BookFeatures.Commands.AddGenre;
 using Application.Features.BookFeatures.Commands.Create;
 using Application.Features.BookFeatures.Commands.Delete;
-using Application.Features.BookFeatures.Commands.DeleteAuthor;
 using Application.Features.BookFeatures.Commands.DeleteGenre;
 using Application.Features.BookFeatures.Commands.Update;
 using Application.Features.BookFeatures.Queries.GetAll;
@@ -92,28 +91,6 @@ public class BookController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Update(UpdateBookCommand command, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-
-    [HttpPut(nameof(AddAuthor))]
-    [Authorize(Roles = "Admin, SuperAdmin")]
-    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddAuthor(AddBookAuthorCommand command, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-    
-    [HttpPut(nameof(DeleteAuthor))]
-    [Authorize(Roles = "Admin, SuperAdmin")]
-    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> DeleteAuthor(DeleteBookAuthorCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
 

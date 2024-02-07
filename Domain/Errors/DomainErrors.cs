@@ -21,6 +21,16 @@ public class DomainErrors
 
     public static class Book
     {
+        public static readonly Error AlreadyContainsAuthor = new(
+            "Book.AlreadyContainsAuthor",
+            "Book already contains author.",
+            400);
+        
+        public static readonly Error NotContainAuthor = new(
+            "Book.NotContainAuthor",
+            "Book does not contain author",
+            400);
+        
         public static readonly Error GenreNotAdded = new(
             "Book.GenreNotAdded",
             "Genre has not been added.",

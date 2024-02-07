@@ -10,4 +10,10 @@ public static class BookExtensions
         var specification = new CanReturnSpecification();
         return specification.IsSatisfied(book);
     }
+
+    public static bool ContainsAuthor(this Book book, int authorId)
+    {
+        var specification = new ContainsAuthorSpecification(authorId);
+        return specification.IsSatisfied(book);
+    }
 }

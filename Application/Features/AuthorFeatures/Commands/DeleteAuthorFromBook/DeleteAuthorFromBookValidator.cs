@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.BookFeatures.Commands.AddAuthor;
+namespace Application.Features.AuthorFeatures.Commands.DeleteAuthorFromBook;
 
-public class AddBookAuthorCommandValidator : AbstractValidator<AddBookAuthorCommand>
+public class DeleteAuthorFromBookValidator : AbstractValidator<DeleteAuthorFromBookCommand>
 {
-    public AddBookAuthorCommandValidator()
+    public DeleteAuthorFromBookValidator()
     {
         RuleFor(c => c.AuthorId)
             .NotEmpty().WithMessage("AuthorId is required.");

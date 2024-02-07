@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using Application.DTOs.Author;
+using Application.Features.AuthorFeatures.Commands.AddAuthorToBook;
 using Application.Features.AuthorFeatures.Commands.Create;
 using Application.Features.AuthorFeatures.Commands.Delete;
+using Application.Features.AuthorFeatures.Commands.DeleteAuthorFromBook;
 using Application.Features.AuthorFeatures.Commands.Update;
 using Application.Features.AuthorFeatures.Queries.GetAll;
 using Application.Features.AuthorFeatures.Queries.GetById;
@@ -75,6 +77,28 @@ public class AuthorController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command, cancellationToken);
         
+        return ApiResponse.GetObjectResult(result);
+    }
+    
+    [HttpPut(nameof(AddAuthorToBook))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> AddAuthorToBook(AddAuthorToBook command, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(command, cancellationToken);
+
+        return ApiResponse.GetObjectResult(result);
+    }
+    
+    [HttpPut(nameof(DeleteAuthorFromBook))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> DeleteAuthorFromBook(DeleteAuthorFromBookCommand command, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(command, cancellationToken);
+
         return ApiResponse.GetObjectResult(result);
     }
 }

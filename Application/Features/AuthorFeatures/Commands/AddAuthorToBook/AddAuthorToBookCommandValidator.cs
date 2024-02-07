@@ -2,7 +2,7 @@
 
 namespace Application.Features.AuthorFeatures.Commands.AddAuthorToBook;
 
-public class AddAuthorToBookCommandValidator : AbstractValidator<AddAuthorToBook>
+public class AddAuthorToBookCommandValidator : AbstractValidator<AddAuthorToBookCommand>
 {
     public AddAuthorToBookCommandValidator()
     {

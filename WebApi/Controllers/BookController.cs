@@ -65,8 +65,9 @@ public class BookController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(BookViewModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Continue)]
-    public async Task<IActionResult> Create(CreateBookCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateBookDto dto, CancellationToken cancellationToken)
     {
+        var command = new CreateBookCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -90,8 +91,9 @@ public class BookController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> Update(UpdateBookCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(UpdateBookDto dto, CancellationToken cancellationToken)
     {
+        var command = new UpdateBookCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

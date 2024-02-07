@@ -8,9 +8,9 @@ using MediatR;
 namespace Application.Features.AuthorFeatures.Commands.AddAuthorToBook;
 
 public class AddAuthorToBookCommandHandler(IUnitOfWork unitOfWork)
-    : IRequestHandler<AddAuthorToBook, Response>
+    : IRequestHandler<AddAuthorToBookCommand, Response>
 {
-    public async Task<Response> Handle(AddAuthorToBook request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(AddAuthorToBookCommand request, CancellationToken cancellationToken)
     {
         var book = await unitOfWork.GetRepository<IBookRepository>()
             .GetByIdAsync(request.BookId, cancellationToken);

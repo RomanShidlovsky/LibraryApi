@@ -47,8 +47,9 @@ public class SubscriptionController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(SubscriptionViewModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error),(int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Create(CreateSubscriptionCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateSubscriptionDto dto, CancellationToken cancellationToken)
     {
+        var command = new CreateSubscriptionCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

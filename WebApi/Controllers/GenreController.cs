@@ -48,8 +48,9 @@ public class GenreController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(GenreViewModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
-    public async Task<IActionResult> Create(CreateGenreCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateGenreDto dto, CancellationToken cancellationToken)
     {
+        var command = new CreateGenreCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -71,8 +72,9 @@ public class GenreController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddGenreToBook(AddGenreToBookCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddGenreToBook(AddGenreToBookDto dto, CancellationToken cancellationToken)
     {
+        var command = new AddGenreToBookCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -82,8 +84,9 @@ public class GenreController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> DeleteGenreFromBook(DeleteGenreFromBookCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteGenreFromBook(DeleteGenreFromBookDto dto, CancellationToken cancellationToken)
     {
+        var command = new DeleteGenreFromBookCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

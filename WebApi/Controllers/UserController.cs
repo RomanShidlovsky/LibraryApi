@@ -51,8 +51,9 @@ public class UserController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(UserViewModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
-    public async Task<IActionResult> Register(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Register(RegisterUserDto dto, CancellationToken cancellationToken)
     {
+        var command = new RegisterUserCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -62,8 +63,9 @@ public class UserController(IMediator mediator) : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType(typeof(TokenModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Unauthorized)]
-    public async Task<IActionResult> Login(LoginUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Login(LoginUserDto dto, CancellationToken cancellationToken)
     {
+        var command = new LoginUserCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -73,8 +75,9 @@ public class UserController(IMediator mediator) : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType(typeof(TokenModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Unauthorized)]
-    public async Task<IActionResult> RefreshToken(RefreshTokenCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> RefreshToken(RefreshTokenDto dto, CancellationToken cancellationToken)
     {
+        var command = new RefreshTokenCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

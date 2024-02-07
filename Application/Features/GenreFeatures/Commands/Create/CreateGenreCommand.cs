@@ -4,4 +4,12 @@ using Domain.Entities;
 
 namespace Application.Features.GenreFeatures.Commands.Create;
 
-public sealed record CreateGenreCommand(string Name) :ICreateCommand<GenreViewModel>;
+public sealed record CreateGenreCommand : ICreateCommand<GenreViewModel>
+{
+    public string Name { get; init; }
+
+    public CreateGenreCommand(CreateGenreDto dto)
+    {
+        Name = dto.Name;
+    }
+}

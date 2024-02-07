@@ -2,14 +2,14 @@
 using Application.Wrappers;
 using MediatR;
 
-namespace Application.Features.AuthorFeatures.Commands.DeleteAuthorFromBook;
+namespace Application.Features.AuthorFeatures.Commands.AddAuthorToBook;
 
-public sealed record DeleteAuthorFromBookCommand : IRequest<Response>
+public sealed record AddAuthorToBookCommand : IRequest<Response>
 {
     public int BookId { get; init; }
     public int AuthorId { get; init; }
 
-    public DeleteAuthorFromBookCommand(DeleteAuthorFromBookDto dto)
+    public AddAuthorToBookCommand(AddAuthorToBookDto dto)
     {
         BookId = dto.BookId;
         AuthorId = dto.AuthorId;

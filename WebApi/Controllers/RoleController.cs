@@ -48,8 +48,9 @@ public class RoleController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(RoleViewModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
-    public async Task<IActionResult> Create(CreateRoleCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateRoleDto dto, CancellationToken cancellationToken)
     {
+        var command = new CreateRoleCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -72,8 +73,9 @@ public class RoleController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddRoleToUser(AddRoleToUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddRoleToUser(AddRoleToUserDto dto, CancellationToken cancellationToken)
     {
+        var command = new AddRoleToUserCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -84,8 +86,9 @@ public class RoleController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> DeleteRoleFromUser(DeleteRoleFromUserCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteRoleFromUser(DeleteRoleFromUserDto dto, CancellationToken cancellationToken)
     {
+        var command = new DeleteRoleFromUserCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

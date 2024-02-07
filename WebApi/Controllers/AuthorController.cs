@@ -48,8 +48,9 @@ public class AuthorController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(AuthorViewModel), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
-    public async Task<IActionResult> Create(CreateAuthorCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateAuthorDto dto, CancellationToken cancellationToken)
     {
+        var command = new CreateAuthorCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -73,8 +74,9 @@ public class AuthorController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.Conflict)]
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> Update(UpdateAuthorCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(UpdateAuthorDto dto, CancellationToken cancellationToken)
     {
+        var command = new UpdateAuthorCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
         
         return ApiResponse.GetObjectResult(result);
@@ -84,8 +86,9 @@ public class AuthorController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddAuthorToBook(AddAuthorToBook command, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddAuthorToBook(AddAuthorToBookDto dto, CancellationToken cancellationToken)
     {
+        var command = new AddAuthorToBookCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);
@@ -95,8 +98,9 @@ public class AuthorController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "Admin, SuperAdmin")]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> DeleteAuthorFromBook(DeleteAuthorFromBookCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteAuthorFromBook(DeleteAuthorFromBookDto dto, CancellationToken cancellationToken)
     {
+        var command = new DeleteAuthorFromBookCommand(dto);
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

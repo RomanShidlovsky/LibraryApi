@@ -16,12 +16,4 @@ public class Subscription : IBaseEntity
     public bool IsActive { get; set; }
     public DateTimeOffset DateCreated { get; set; }
     public DateTimeOffset? DateUpdated { get; set; }
-    
-    public void ReturnBook()
-    {
-        if (!IsActive)
-            throw new InvalidOperationException("Book already returned.");
-
-        IsActive = false;
-    }
 }

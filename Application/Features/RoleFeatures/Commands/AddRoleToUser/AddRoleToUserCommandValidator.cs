@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.UserFeatures.Commands.AddRole;
+namespace Application.Features.RoleFeatures.Commands.AddRoleToUser;
 
-public class AddUserRoleCommandValidator : AbstractValidator<AddUserRoleCommand>
+public class AddRoleToUserCommandValidator : AbstractValidator<AddRoleToUserCommand>
 {
-    public AddUserRoleCommandValidator()
+    public AddRoleToUserCommandValidator()
     {
         RuleFor(c => c.RoleName)
             .NotEmpty().WithMessage("Name is required.")

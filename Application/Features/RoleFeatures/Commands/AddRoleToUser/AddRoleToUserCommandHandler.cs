@@ -1,18 +1,15 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Commands;
-using Application.Interfaces.Repositories;
-using Application.Wrappers;
+﻿using Application.Wrappers;
 using Domain.Entities;
 using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Features.UserFeatures.Commands.AddRole;
+namespace Application.Features.RoleFeatures.Commands.AddRoleToUser;
 
-public class AddUserRoleCommandHandler(UserManager<User> userManager, RoleManager<Role> roleManager)
-    : IRequestHandler<AddUserRoleCommand, Response>
+public class AddRoleToUserCommandHandler(UserManager<User> userManager, RoleManager<Role> roleManager)
+    : IRequestHandler<AddRoleToUserCommand, Response>
 {
-    public async Task<Response> Handle(AddUserRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(AddRoleToUserCommand request, CancellationToken cancellationToken)
     {
         var role = await roleManager.FindByNameAsync(request.RoleName);
         if (role == null)

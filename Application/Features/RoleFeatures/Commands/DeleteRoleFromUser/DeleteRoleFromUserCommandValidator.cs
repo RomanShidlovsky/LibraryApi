@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.UserFeatures.Commands.DeleteRole;
+namespace Application.Features.RoleFeatures.Commands.DeleteRoleFromUser;
 
-public class DeleteUserRoleCommandValidator : AbstractValidator<DeleteUserRoleCommand>
+public class DeleteRoleFromUserCommandValidator : AbstractValidator<DeleteRoleFromUserCommand>
 {
-    public DeleteUserRoleCommandValidator()
+    public DeleteRoleFromUserCommandValidator()
     {
         RuleFor(c => c.RoleName)
             .NotEmpty().WithMessage("Name is required.")

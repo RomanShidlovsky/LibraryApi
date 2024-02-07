@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using Application.Auth;
 using Application.DTOs.User;
-using Application.Features.UserFeatures.Commands.AddRole;
+using Application.Features.RoleFeatures.Commands.AddRoleToUser;
+using Application.Features.RoleFeatures.Commands.DeleteRoleFromUser;
 using Application.Features.UserFeatures.Commands.Delete;
-using Application.Features.UserFeatures.Commands.DeleteRole;
 using Application.Features.UserFeatures.Commands.Login;
 using Application.Features.UserFeatures.Commands.RefreshToken;
 using Application.Features.UserFeatures.Commands.Register;
@@ -87,30 +87,6 @@ public class UserController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteUserCommand(id);
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-    
-    [HttpPut(nameof(AddRole))]
-    [Authorize(Roles = "SuperAdmin")]
-    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddRole(AddUserRoleCommand command, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-    
-    [HttpPut(nameof(DeleteRole))]
-    [Authorize(Roles = "SuperAdmin")]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> DeleteRole(DeleteUserRoleCommand command, CancellationToken cancellationToken)
-    {
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

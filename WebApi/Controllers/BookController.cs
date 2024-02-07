@@ -2,14 +2,14 @@
 using System.Runtime.InteropServices.JavaScript;
 using Application.DTOs.Book;
 using Application.Features.AuthorFeatures.Commands.AddAuthorToBook;
-using Application.Features.BookFeatures.Commands.AddGenre;
 using Application.Features.BookFeatures.Commands.Create;
 using Application.Features.BookFeatures.Commands.Delete;
-using Application.Features.BookFeatures.Commands.DeleteGenre;
 using Application.Features.BookFeatures.Commands.Update;
 using Application.Features.BookFeatures.Queries.GetAll;
 using Application.Features.BookFeatures.Queries.GetById;
 using Application.Features.BookFeatures.Queries.GetByISBN;
+using Application.Features.GenreFeatures.Commands.AddGenreToBook;
+using Application.Features.GenreFeatures.Commands.DeleteGenreFromBook;
 using Application.Wrappers;
 using Domain.Errors;
 using MediatR;
@@ -91,28 +91,6 @@ public class BookController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Error>), (int)HttpStatusCode.UnprocessableEntity)]
     [ProducesResponseType(typeof(Error),(int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Update(UpdateBookCommand command, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-    
-    [HttpPut(nameof(AddGenre))]
-    [Authorize(Roles = "Admin, SuperAdmin")]
-    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> AddGenre(AddBookGenreCommand command, CancellationToken cancellationToken)
-    {
-        var result = await mediator.Send(command, cancellationToken);
-
-        return ApiResponse.GetObjectResult(result);
-    }
-    
-    [HttpPut(nameof(DeleteGenre))]
-    [Authorize(Roles = "Admin, SuperAdmin")]
-    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> DeleteGenre(DeleteBookGenreCommand command, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
 

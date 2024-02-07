@@ -31,6 +31,16 @@ public class DomainErrors
             "Book does not contain author",
             400);
         
+        public static readonly Error AlreadyContainsGenre = new(
+            "Book.AlreadyContainsGenre",
+            "Book already contains genre.",
+            400);
+        
+        public static readonly Error NotContainGenre = new(
+            "Book.NotContainGenre",
+            "Book does not contain genre",
+            400);
+        
         public static readonly Error GenreNotAdded = new(
             "Book.GenreNotAdded",
             "Genre has not been added.",

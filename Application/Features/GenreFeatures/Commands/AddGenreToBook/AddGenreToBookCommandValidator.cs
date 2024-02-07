@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.BookFeatures.Commands.DeleteGenre;
+namespace Application.Features.GenreFeatures.Commands.AddGenreToBook;
 
-public class DeleteBookGenreCommandValidator : AbstractValidator<DeleteBookGenreCommand>
+public class AddGenreToBookCommandValidator : AbstractValidator<AddGenreToBookCommand>
 {
-    public DeleteBookGenreCommandValidator()
+    public AddGenreToBookCommandValidator()
     {
         RuleFor(c => c.BookId)
             .NotEmpty().WithMessage("BookId is required.");

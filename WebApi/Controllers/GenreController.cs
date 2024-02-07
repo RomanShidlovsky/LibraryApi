@@ -1,9 +1,12 @@
 ﻿using System.Net;
 using Application.DTOs.Genre;
+using Application.Features.GenreFeatures.Commands.AddGenreToBook;
 using Application.Features.GenreFeatures.Commands.Create;
 using Application.Features.GenreFeatures.Commands.Delete;
+using Application.Features.GenreFeatures.Commands.DeleteGenreFromBook;
 using Application.Features.GenreFeatures.Queries.GetAll;
 using Application.Features.GenreFeatures.Queries.GetById;
+using Application.Wrappers;
 using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -59,6 +62,28 @@ public class GenreController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteGenreCommand(id);
+        var result = await mediator.Send(command, cancellationToken);
+
+        return ApiResponse.GetObjectResult(result);
+    }
+    
+    [HttpPut(nameof(AddGenreToBook))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> AddGenreToBook(AddGenreToBookCommand command, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(command, cancellationToken);
+
+        return ApiResponse.GetObjectResult(result);
+    }
+    
+    [HttpPut(nameof(DeleteGenreFromBook))]
+    [Authorize(Roles = "Admin, SuperAdmin")]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Error), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> DeleteGenreFromBook(DeleteGenreFromBookCommand command, CancellationToken cancellationToken)
+    {
         var result = await mediator.Send(command, cancellationToken);
 
         return ApiResponse.GetObjectResult(result);

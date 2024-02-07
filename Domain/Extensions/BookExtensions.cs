@@ -16,4 +16,10 @@ public static class BookExtensions
         var specification = new ContainsAuthorSpecification(authorId);
         return specification.IsSatisfied(book);
     }
+
+    public static bool ContainsGenre(this Book book, int genreId)
+    {
+        var specification = new ContainsGenreSpecification(genreId);
+        return specification.IsSatisfied(book);
+    }
 }
